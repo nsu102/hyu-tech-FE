@@ -4,12 +4,14 @@ import { useRef, useState, type PointerEvent, type CSSProperties } from "react";
 import type { Word } from "../data";
 import { Icon } from "../icons";
 import { LearningCard } from "./learning-card";
+import { useI18n } from "../i18n";
 
 export function SwipeDeck({ words, scene, index, revealed, onReveal, onIndexChange, onEdit, onSpeak, onMore, moreBusy }: {
   words: Word[]; scene: string; index: number; revealed: boolean;
   onReveal: (revealed: boolean) => void; onIndexChange: (index: number) => void;
   onEdit: () => void; onSpeak: (text: string) => void; onMore: () => void; moreBusy: boolean;
 }) {
+  const { t } = useI18n();
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
   const gesture = useRef<{ x: number; y: number; time: number; axis: "x" | "y" | null } | null>(null);
@@ -48,14 +50,14 @@ export function SwipeDeck({ words, scene, index, revealed, onReveal, onIndexChan
     if (Math.abs(dx) > threshold || (Math.abs(dx) > 28 && Math.abs(dx) / elapsed > 0.5)) change(index + (dx < 0 ? 1 : -1));
   }
   const style = { "--drag-x": `${dragX}px`, "--drag-angle": `${dragX / 32}deg` } as CSSProperties;
-  return <div className="swipe-deck" role="region" aria-roledescription="카드 모음" aria-label="단어 학습 카드" onKeyDown={event => {
+  return <div className="swipe-deck" role="region" aria-roledescription={t("deck.roledesc")} aria-label={t("deck.label")} onKeyDown={event => {
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") { event.preventDefault(); change(index + (event.key === "ArrowRight" ? 1 : -1)); }
   }}>
-    <div className="deck-toolbar"><span className="deck-progress" aria-live="polite"><span className="deck-bar"><span style={{ width: `${(index + 1) / words.length * 100}%` }}/></span>{index + 1} / {words.length}</span><span className="deck-tools"><button className="more-button" onClick={onMore} disabled={moreBusy} aria-label="단어 더 만들기 (Pro)">{moreBusy ? <span className="spinner"/> : <Icon name="plus" size={16}/>}<b>PRO</b></button><button className="icon-button" onClick={onEdit} aria-label={`${words[index].korean} 단어 수정`}><Icon name="edit" size={18}/></button></span></div>
+    <div className="deck-toolbar"><span className="deck-progress" aria-live="polite"><span className="deck-bar"><span style={{ width: `${(index + 1) / words.length * 100}%` }}/></span>{index + 1} / {words.length}</span><span className="deck-tools"><button className="more-button" onClick={onMore} disabled={moreBusy} aria-label={t("deck.more")}>{moreBusy ? <span className="spinner"/> : <Icon name="plus" size={16}/>}<b>PRO</b></button><button className="icon-button" onClick={onEdit} aria-label={t("deck.edit", { word: words[index].korean })}><Icon name="edit" size={18}/></button></span></div>
     <div className={`swipe-surface ${dragging ? "is-dragging" : ""}`} style={style} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={event => end(event)} onPointerCancel={event => end(event, true)} onClickCapture={event => { if (suppressClick.current) { event.preventDefault(); event.stopPropagation(); suppressClick.current = false; } }}>
       <div className="swipe-moving-card"><LearningCard word={words[index]} scene={scene} revealed={revealed} onReveal={onReveal} onSpeak={onSpeak}/></div>
     </div>
-    <div className="deck-controls"><button className="icon-button" aria-label="이전 단어" disabled={index === 0} onClick={() => change(index - 1)}><Icon name="back" size={22}/></button><button className="icon-button" aria-label="다음 단어" disabled={last} onClick={() => change(index + 1)}><Icon name="chevron" size={22}/></button></div>
-    <span className="sr-only" role="status">{index + 1} / {words.length} 카드 · {words[index].korean}</span>
+    <div className="deck-controls"><button className="icon-button" aria-label={t("deck.prev")} disabled={index === 0} onClick={() => change(index - 1)}><Icon name="back" size={22}/></button><button className="icon-button" aria-label={t("deck.next")} disabled={last} onClick={() => change(index + 1)}><Icon name="chevron" size={22}/></button></div>
+    <span className="sr-only" role="status">{t("deck.status", { i: index + 1, n: words.length, word: words[index].korean })}</span>
   </div>;
 }

@@ -12,7 +12,7 @@ export type Word = {
 };
 export type CultureNote = {
   id: string; titleKo: string; titleTranslated: string; descriptionKo: string; descriptionTranslated: string;
-  phraseKo: string; phraseTranslated: string; qualificationKo: string; qualificationTranslated: string; sourceIds: string[];
+  phraseKo: string; phraseTranslated: string; qualificationKo?: string; qualificationTranslated?: string; sourceIds: string[];
 };
 export type VocabularyBook = {
   id: string; title: string; spaceType: SpaceType; spaceDescription: string; translationLanguage: string;
@@ -127,10 +127,13 @@ export const languages = [
 ] as const;
 export type Language = typeof languages[number]["code"];
 export const levels = [
-  { id: "beginner", name: "초급", hint: "TOPIK 1–2 · 기본 단어", prompt: "beginner (TOPIK 1–2): basic everyday nouns and verbs, very short 해요체 example sentences" },
-  { id: "intermediate", name: "중급", hint: "TOPIK 3–4 · 생활 표현", prompt: "intermediate (TOPIK 3–4): more specific nouns, common verbs and set phrases, natural sentences with connectives" },
-  { id: "advanced", name: "고급", hint: "TOPIK 5–6 · 한자어·관용 표현", prompt: "advanced (TOPIK 5–6): precise and Sino-Korean vocabulary, formal and colloquial nuance, richer example sentences" },
+  { id: "beginner", prompt: "beginner (TOPIK 1–2): basic everyday nouns and verbs, very short 해요체 example sentences" },
+  { id: "intermediate", prompt: "intermediate (TOPIK 3–4): more specific nouns, common verbs and set phrases, natural sentences with connectives" },
+  { id: "advanced", prompt: "advanced (TOPIK 5–6): precise and Sino-Korean vocabulary, formal and colloquial nuance, richer example sentences" },
 ] as const;
 export type Level = typeof levels[number]["id"];
 export type Profile = { lang: Language; level: Level; plan: "free" | "pro" };
 export const PROFILE_KEY = "teumteum:profile:v1";
+// Free plan: AI-made books per Seoul day. ponytail: counted in this browser only; enforce on the server once there are accounts.
+export const FREE_DAILY_BOOKS = 3;
+export const USAGE_KEY = "teumteum:usage:v1";

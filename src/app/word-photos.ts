@@ -9,11 +9,11 @@ export function illustration(key: string | null | undefined) {
 // Priority: explicit image (API/generated) → crop of the observed object in the space photo → illustration.
 export function wordVisual(word: Word, scene: string) {
   if (word.imageRef && /^(?:https?:\/\/|\/(?!\/)|data:image\/(?:png|jpeg|webp);base64,)/.test(word.imageRef)) {
-    return { kind: "generated" as const, src: word.imageRef, bbox: null, label: "단어 이미지" };
+    return { kind: "generated" as const, src: word.imageRef, bbox: null };
   }
   if (word.source === "observed" && validBox(word.bbox)) {
-    return { kind: "crop" as const, src: scene, bbox: word.bbox, label: "공간 사진에서 찾은 사물" };
+    return { kind: "crop" as const, src: scene, bbox: word.bbox };
   }
   // ponytail: photoKey kept only for books saved before iconKey existed.
-  return { kind: "illustration" as const, src: illustration(word.iconKey ?? word.photoKey), bbox: null, label: "일러스트" };
+  return { kind: "illustration" as const, src: illustration(word.iconKey ?? word.photoKey), bbox: null };
 }

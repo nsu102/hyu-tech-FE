@@ -2,6 +2,7 @@
 import type { CSSProperties } from "react";
 import { spaces, type VocabularyBook } from "../data";
 import { Icon } from "../icons";
+import { useI18n } from "../i18n";
 
 export function HomeScreen({ books, onCapture, onSample, onOpen }: {
   books: VocabularyBook[];
@@ -9,31 +10,33 @@ export function HomeScreen({ books, onCapture, onSample, onOpen }: {
   onSample: () => void;
   onOpen: (book: VocabularyBook) => void;
 }) {
+  const { t } = useI18n();
   return <section className="home-page page-enter">
     <button className="hero-card" onClick={onCapture}>
       <span className="hero-text">
-        <strong>공간을 찍으면<br/>단어집이 생겨요</strong>
-        <span className="hero-cta"><Icon name="camera" size={17}/>사진 찍기</span>
+        <strong className="pre-line">{t("home.hero")}</strong>
+        <span className="hero-cta"><Icon name="camera" size={17}/>{t("home.take_photo")}</span>
       </span>
       <img src="/illustrations/mascot.svg" alt="" width={112} height={112} className="hero-mascot"/>
     </button>
 
-    <div className="section-heading"><h1>내 단어집</h1><button className="icon-button soft" aria-label="새 단어집" onClick={onCapture}><Icon name="plus" size={20}/></button></div>
+    <div className="section-heading"><h1>{t("library.title")}</h1><button className="icon-button soft" aria-label={t("home.new_book")} onClick={onCapture}><Icon name="plus" size={20}/></button></div>
     <div className="book-grid">
       {books.map(book => <BookCard key={book.id} book={book} onOpen={() => onOpen(book)}/>)}
       <button className="book-card sample" onClick={onSample} style={{ "--tint": "#ffe9d6" } as CSSProperties}>
         <span className="book-card-art"><img src="/images/cafe.jpg" alt="" width={160} height={120}/></span>
-        <span className="book-card-meta"><span className="badge">예시</span><strong>카페</strong><small>8개 단어</small></span>
+        <span className="book-card-meta"><span className="badge">{t("home.example")}</span><strong>카페</strong><small>{t("word_count", { n: 8 })}</small></span>
       </button>
     </div>
-    {!books.length && <p className="home-empty">아직 저장한 단어집이 없어요.<br/>예시 카페 단어집부터 둘러보세요.</p>}
+    {!books.length && <p className="home-empty pre-line">{t("home.empty")}</p>}
   </section>;
 }
 
 function BookCard({ book, onOpen }: { book: VocabularyBook; onOpen: () => void }) {
+  const { t } = useI18n();
   const space = spaces.find(s => s.id === book.spaceType);
   return <button className="book-card" onClick={onOpen} style={{ "--tint": space?.tint } as CSSProperties}>
     <span className="book-card-art"><img src={book.imageRef} alt="" width={160} height={120}/></span>
-    <span className="book-card-meta"><span className="badge">{space?.name}</span><strong>{book.title}</strong><small>{book.words.length}개 단어</small></span>
+    <span className="book-card-meta"><span className="badge">{t(`space.${book.spaceType}`)}</span><strong>{book.title}</strong><small>{t("word_count", { n: book.words.length })}</small></span>
   </button>;
 }

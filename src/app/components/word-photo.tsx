@@ -49,7 +49,7 @@ export function WordPhoto({ word, scene, className = "", eager = false }: {
   if (visual.bbox) {
     const c = size?.src === visual.src ? frameCrop(visual.bbox, size.w, size.h, aspect) : null;
     return <span ref={frame} className={`word-photo word-photo--crop ${className}`}>
-      {c && size && <svg viewBox={`${c.x} ${c.y} ${c.w} ${c.h}`} preserveAspectRatio="xMidYMid slice" role="img" aria-label={`${word.korean} · ${visual.label}`}>
+      {c && size && <svg viewBox={`${c.x} ${c.y} ${c.w} ${c.h}`} preserveAspectRatio="xMidYMid slice" role="img" aria-label={`${word.korean} · ${word.translation}`}>
         <image href={visual.src} width={size.w} height={size.h}/>
         <rect className="object-ring" x={visual.bbox[0] * size.w} y={visual.bbox[1] * size.h} width={visual.bbox[2] * size.w} height={visual.bbox[3] * size.h}
           rx={Math.min(visual.bbox[2] * size.w, visual.bbox[3] * size.h) * 0.12} vectorEffect="non-scaling-stroke"/>
@@ -57,6 +57,6 @@ export function WordPhoto({ word, scene, className = "", eager = false }: {
     </span>;
   }
   return <span className={`word-photo word-photo--${visual.kind} ${className}`}>
-    <img src={visual.src} alt={`${word.korean} · ${visual.label}`} loading={eager ? "eager" : "lazy"} draggable={false} width={480} height={360}/>
+    <img src={visual.src} alt={`${word.korean} · ${word.translation}`} loading={eager ? "eager" : "lazy"} draggable={false} width={480} height={360}/>
   </span>;
 }
