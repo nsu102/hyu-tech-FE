@@ -235,7 +235,7 @@ export default function TeumApp() {
   return <LangContext.Provider value={profile.lang}>
     <div className={`app-shell screen-${screen}`}>
       <header className="app-header">
-        {screen === "home" || screen === "library" ? <button className="brand" onClick={() => navigate("home")} aria-label={t("home_label")}><span className="brand-mark" aria-hidden="true"/>틈틈</button> : <button className="icon-button" aria-label={t("back")} onClick={() => navigate("home")}><Icon name="back"/></button>}
+        {screen === "home" || screen === "library" ? <button className="brand" onClick={() => navigate("home")} aria-label={t("home_label")}><span className="brand-mark" aria-hidden="true"/>틈틈<i className="brand-latin" lang="en">teumteum</i></button> : <button className="icon-button" aria-label={t("back")} onClick={() => navigate("home")}><Icon name="back"/></button>}
         <button className="language-button" onClick={() => setModal({ kind: "settings" })} aria-label={t("settings_label")}><Icon name="globe" size={17}/><span>{profile.lang.toUpperCase()}</span><Icon name="down" size={12}/></button>
       </header>
 
@@ -243,7 +243,7 @@ export default function TeumApp() {
       {screen === "home" && <HomeScreen books={books} onCapture={() => navigate("capture")} onSample={() => sample()} onOpen={openBook}/>}
 
       {screen === "capture" && <section className="capture-page page-enter content-pad">
-        <div className="step-label"><span className={!photo ? "current" : "done"}>{t("capture.step_photo")}</span><span className="step-line"/><span className={photo ? "current" : ""}>{t("capture.step_space")}</span></div>
+        <div className="step-label"><span className={!photo ? "current" : "done"}><b>01</b>{t("capture.step_photo")}</span><span className="step-line"/><span className={photo ? "current" : ""}><b>02</b>{t("capture.step_space")}</span></div>
         <h1 className="page-title">{photo ? t("capture.title_space") : t("capture.title_photo")}</h1>
         <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={upload} className="hidden-input" aria-label={t("capture.gallery_input")}/>
         <input ref={cameraRef} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" onChange={upload} className="hidden-input" aria-label={t("capture.camera_input")}/>
