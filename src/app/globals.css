@@ -193,6 +193,7 @@ input,textarea{min-width:0}
 .word-photo>img{width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none}
 .word-photo>svg{width:100%;height:100%}
 .learning-card-photo.word-photo--crop{border-radius:20px;background:#f3ede7}
+.object-ring{fill:none;stroke:var(--accent);stroke-width:3;stroke-dasharray:8 6;stroke-linecap:round;filter:drop-shadow(0 0 2px #fff)}
 .learning-card-photo{flex:0 1 58%;width:100%;height:58%;max-height:58%;min-height:0;margin:0 0 14px;transition:height 260ms,max-height 260ms,flex-basis 260ms}
 .learning-card-photo.word-photo--generated>img{border-radius:20px}
 .learning-card-korean{font-size:38px;font-weight:800;line-height:1.2;letter-spacing:-1.2px}

@@ -4,17 +4,13 @@ import type { BBox, Word } from "../data";
 import { wordVisual } from "../word-photos";
 import { Icon } from "../icons";
 
-// Region of the photo (pixels) with the frame's aspect ratio, centred on the object, kept inside the photo.
-// It is as small as possible while still containing the object plus a margin; if the photo is too small for
-// that, it fills the frame anyway and trims the object's edges.
-export function frameCrop([x, y, w, h]: BBox, photoW: number, photoH: number, aspect: number, margin = 0.15) {
+// Region of the photo (pixels) with the frame's aspect ratio, centred on the object, as small as possible while
+// containing the object plus a margin. Near a photo edge it reaches past the photo; that part shows the frame background.
+export function frameCrop([x, y, w, h]: BBox, photoW: number, photoH: number, aspect: number, margin = 0.25) {
   let cw = w * (1 + 2 * margin) * photoW, ch = h * (1 + 2 * margin) * photoH;
   if (cw / ch < aspect) cw = ch * aspect; else ch = cw / aspect;
-  const fit = Math.min(1, photoW / cw, photoH / ch);
-  cw *= fit; ch *= fit;
   const cx = (x + w / 2) * photoW, cy = (y + h / 2) * photoH;
-  const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
-  return { x: clamp(cx - cw / 2, photoW - cw), y: clamp(cy - ch / 2, photoH - ch), w: cw, h: ch };
+  return { x: cx - cw / 2, y: cy - ch / 2, w: cw, h: ch };
 }
 
 export function WordPhoto({ word, scene, className = "", eager = false }: {
@@ -51,6 +47,8 @@ export function WordPhoto({ word, scene, className = "", eager = false }: {
     return <span ref={frame} className={`word-photo word-photo--crop ${className}`}>
       {c && size && <svg viewBox={`${c.x} ${c.y} ${c.w} ${c.h}`} preserveAspectRatio="xMidYMid slice" role="img" aria-label={`${word.korean} · ${visual.label}`}>
         <image href={visual.src} width={size.w} height={size.h}/>
+        <rect className="object-ring" x={visual.bbox[0] * size.w} y={visual.bbox[1] * size.h} width={visual.bbox[2] * size.w} height={visual.bbox[3] * size.h}
+          rx={Math.min(visual.bbox[2] * size.w, visual.bbox[3] * size.h) * 0.12} vectorEffect="non-scaling-stroke"/>
       </svg>}
     </span>;
   }
