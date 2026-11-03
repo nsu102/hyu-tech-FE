@@ -12,8 +12,15 @@ import { CalendarSheet } from "./components/calendar-sheet";
 import { ProfileFields } from "./components/profile-fields";
 import starterBooks from "./starter-books.json";
 
-type Screen = "onboarding" | "home" | "library" | "capture" | "detail";
-type ModalState = { kind: "settings" } | { kind: "calendar" } | { kind: "culture" } | { kind: "scene" } | { kind: "pro" } | { kind: "word"; word: Word } | { kind: "delete"; book: VocabularyBook } | null;
+type Screen = "home" | "library" | "capture" | "detail";
+type ModalState = { kind: "settings" } | { kind: "calendar" } | { kind: "culture" } | { kind: "scene" } | { kind: "pro" } | { kind: "onboarding" } | { kind: "word"; word: Word } | { kind: "delete"; book: VocabularyBook } | null;
+
+// Centered dialog the user has to answer (no close button, Escape and backdrop do nothing).
+function Dialog({ children, label }: { children: ReactNode; label: string }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => { const dialog = ref.current; dialog?.showModal(); return () => dialog?.close(); }, []);
+  return <dialog ref={ref} className="modal modal-center" onCancel={e => e.preventDefault()} aria-label={label}><div className="modal-inner">{children}</div></dialog>;
+}
 
 function Modal({ children, onClose, label }: { children: ReactNode; onClose: () => void; label: string }) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -90,8 +97,8 @@ export default function TeumApp() {
     try {
       const saved = JSON.parse(localStorage.getItem(PROFILE_KEY) || "null") as Profile | null;
       if (saved && languages.some(l => l.code === saved.lang) && levels.some(l => l.id === saved.level)) setProfile({ ...saved, plan: saved.plan === "pro" ? "pro" : "free" });
-      else setScreen("onboarding");
-    } catch { setScreen("onboarding"); }
+      else setModal({ kind: "onboarding" });
+    } catch { setModal({ kind: "onboarding" }); }
     setReady(true);
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
@@ -213,19 +220,11 @@ export default function TeumApp() {
   return <>
     <div className={`app-shell screen-${screen}`}>
       <header className="app-header">
-        {screen === "home" || screen === "library" || screen === "onboarding" ? <button className="brand" onClick={() => navigate("home")} aria-label="틈틈 홈"><img src="/illustrations/mascot.svg" alt="" width={34} height={34}/>틈틈</button> : <button className="icon-button" aria-label="뒤로 가기" onClick={() => navigate("home")}><Icon name="back"/></button>}
-        {screen !== "onboarding" && <button className="language-button" onClick={() => setModal({ kind: "settings" })} aria-label="내 언어와 한국어 실력 설정"><Icon name="globe" size={17}/><span>{profile.lang.toUpperCase()}</span><Icon name="down" size={12}/></button>}
+        {screen === "home" || screen === "library" ? <button className="brand" onClick={() => navigate("home")} aria-label="틈틈 홈"><img src="/illustrations/mascot.svg" alt="" width={34} height={34}/>틈틈</button> : <button className="icon-button" aria-label="뒤로 가기" onClick={() => navigate("home")}><Icon name="back"/></button>}
+        <button className="language-button" onClick={() => setModal({ kind: "settings" })} aria-label="내 언어와 한국어 실력 설정"><Icon name="globe" size={17}/><span>{profile.lang.toUpperCase()}</span><Icon name="down" size={12}/></button>
       </header>
 
       <main id="main">
-      {screen === "onboarding" && <section className="onboarding-page page-enter content-pad">
-        <img src="/illustrations/mascot.svg" alt="" width={88} height={88}/>
-        <h1 className="page-title">반가워요!<br/>어떻게 배워 볼까요?</h1>
-        <p className="onboarding-lead">뜻과 예문은 내 언어로, 단어는 내 실력에 맞춰 골라 드려요.</p>
-        <ProfileFields lang={profile.lang} level={profile.level} onChange={next => setProfile({ ...profile, ...next })}/>
-        <button className="button button-dark" onClick={() => { saveProfile(profile); navigate("home"); }}>시작하기<Icon name="arrow" size={18}/></button>
-      </section>}
-
       {screen === "home" && <HomeScreen books={books} onCapture={() => navigate("capture")} onSample={() => sample()} onOpen={openBook}/>}
 
       {screen === "capture" && <section className="capture-page page-enter content-pad">
@@ -279,6 +278,13 @@ export default function TeumApp() {
     </div>
     {toast && <div className="toast" role="status"><Icon name="info" size={18}/>{toast}<button onClick={() => setToast("")} aria-label="알림 닫기"><Icon name="close" size={16}/></button></div>}
     {modal?.kind === "settings" && <Modal label="설정" onClose={() => setModal(null)}><h2>설정</h2><ProfileFields lang={profile.lang} level={profile.level} onChange={next => saveProfile({ ...profile, ...next })}/><div className="settings-language"><span>플랜</span>{profile.plan === "pro" ? <span className="plan-row"><strong className="pro-tag">PRO</strong><button className="text-button" onClick={() => saveProfile({ ...profile, plan: "free" })}>해지</button></span> : <button className="text-button" onClick={() => setModal({ kind: "pro" })}>Pro 알아보기</button>}</div><p className="settings-note">새로 만드는 단어집부터 적용돼요.</p><p className="settings-note">{aiMode === "sample" ? "샘플 모드 · 서버에 AI 키가 설정되지 않았어요." : "사진 분석은 Claude API로 서버에서 처리해요."}<br/>단어집은 이 브라우저에 저장됩니다. 계정 동기화는 아직 없어요.</p><p className="asset-credit">일러스트는 이 프로젝트용으로 직접 제작했어요.<br/>공간 예시 사진: Unsplash</p></Modal>}
+    {modal?.kind === "onboarding" && <Dialog label="시작하기"><div className="onboarding">
+      <img src="/illustrations/mascot.svg" alt="" width={72} height={72}/>
+      <h2>반가워요! 어떻게 배워 볼까요?</h2>
+      <p className="onboarding-lead">뜻과 예문은 내 언어로, 단어는 내 실력에 맞춰 골라 드려요.</p>
+      <ProfileFields lang={profile.lang} level={profile.level} onChange={next => setProfile({ ...profile, ...next })}/>
+      <button className="button button-dark" onClick={() => { saveProfile(profile); setModal(null); }}>시작하기<Icon name="arrow" size={18}/></button>
+    </div></Dialog>}
     {modal?.kind === "pro" && <Modal label="틈틈 Pro" onClose={() => setModal(null)}><div className="pro-sheet">
       <span className="pro-tag">PRO</span><h2>단어를 더, 내 실력에 맞게</h2>
       <ul className="pro-benefits">

@@ -270,10 +270,14 @@ input,textarea{min-width:0}
 .level-list strong{font-size:15px;font-weight:700}
 .level-list small{font-size:12px;color:var(--muted)}
 .level-list>button>svg{color:var(--accent)}
-.onboarding-page{display:flex;flex-direction:column;padding-top:8px}
-.onboarding-page>img{margin-bottom:6px}
-.onboarding-lead{margin:-6px 0 22px;color:var(--muted);font-size:14px}
-.screen-onboarding .bottom-nav{display:none}
+.modal-center{inset:0;width:calc(100% - 32px);max-width:calc(var(--app-width) - 32px);max-height:calc(100svh - 48px);margin:auto;border-radius:28px}
+.modal-center[open]{animation:pop 320ms cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{from{transform:scale(.94)}}
+.modal-center>.modal-inner{padding:24px 18px 20px}
+.onboarding{display:flex;flex-direction:column}
+.onboarding>img{align-self:center;margin-bottom:4px}
+.onboarding>h2{text-align:center;font-size:20px;margin-bottom:4px}
+.onboarding-lead{margin:0 0 20px;color:var(--muted);font-size:13px;text-align:center}
 .settings-note{font-size:12px;color:var(--muted);line-height:1.8;margin-top:14px}
 .asset-credit{font-size:12px;color:var(--muted);line-height:1.8;margin-top:18px}
 .culture-card{padding:18px;margin-top:12px;border-radius:var(--radius);background:#fbf6f1}
