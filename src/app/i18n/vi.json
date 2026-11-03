@@ -123,7 +123,6 @@
   "scene.title": "Ảnh",
   "scene.marker": "Từ số {n}: {word}",
   "scene.sample": "Chế độ mẫu · không phải kết quả phân tích ảnh.",
-  "scene.ai": "Phân tích AI · {model}",
   "culture.title": "Văn hoá Hàn Quốc",
   "culture.remove": "Bỏ {name}",
   "culture.empty": "Không có ghi chú văn hoá.",

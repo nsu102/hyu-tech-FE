@@ -123,7 +123,6 @@
   "scene.title": "Foto",
   "scene.marker": "Palabra {n}: {word}",
   "scene.sample": "Modo de ejemplo · no es un análisis de la foto.",
-  "scene.ai": "Análisis con IA · {model}",
   "culture.title": "Cultura coreana",
   "culture.remove": "Quitar {name}",
   "culture.empty": "No hay notas culturales.",
