@@ -232,7 +232,7 @@ export default function TeumApp() {
   return <LangContext.Provider value={profile.lang}>
     <div className={`app-shell screen-${screen}`}>
       <header className="app-header">
-        {screen === "home" || screen === "library" ? <button className="brand" onClick={() => navigate("home")} aria-label={t("home_label")}><img src="/illustrations/mascot.svg" alt="" width={34} height={34}/>틈틈</button> : <button className="icon-button" aria-label={t("back")} onClick={() => navigate("home")}><Icon name="back"/></button>}
+        {screen === "home" || screen === "library" ? <button className="brand" onClick={() => navigate("home")} aria-label={t("home_label")}><span className="brand-mark" aria-hidden="true"/>틈틈</button> : <button className="icon-button" aria-label={t("back")} onClick={() => navigate("home")}><Icon name="back"/></button>}
         <button className="language-button" onClick={() => setModal({ kind: "settings" })} aria-label={t("settings_label")}><Icon name="globe" size={17}/><span>{profile.lang.toUpperCase()}</span><Icon name="down" size={12}/></button>
       </header>
 
@@ -245,7 +245,7 @@ export default function TeumApp() {
         <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={upload} className="hidden-input" aria-label={t("capture.gallery_input")}/>
         <input ref={cameraRef} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" onChange={upload} className="hidden-input" aria-label={t("capture.camera_input")}/>
         {!photo ? <>
-          <div className="capture-hero"><img src="/illustrations/mascot.svg" alt="" width={120} height={120}/><p>{t("capture.hint")}</p></div>
+          <div className="capture-hero"><span className="viewfinder" aria-hidden="true"><Icon name="camera" size={28}/></span><p>{t("capture.hint")}</p></div>
           <button className="button button-dark" onClick={() => cameraRef.current?.click()} disabled={busy}><Icon name="camera"/>{t("capture.shoot")}</button>
           <button className="button button-outline" onClick={() => fileRef.current?.click()} disabled={busy}><Icon name="image"/>{t("capture.album")}</button>
           <p className="privacy-note"><Icon name="info" size={15}/>{t("capture.limits")}<br/>{t("capture.privacy")}</p>
@@ -292,7 +292,6 @@ export default function TeumApp() {
     {toast && <div className="toast" role="status"><Icon name="info" size={18}/>{toast}<button onClick={() => setToast("")} aria-label={t("dismiss")}><Icon name="close" size={16}/></button></div>}
     {modal?.kind === "settings" && <Modal label={t("settings.title")} closeLabel={t("close")} onClose={() => setModal(null)}><h2>{t("settings.title")}</h2><ProfileFields lang={profile.lang} level={profile.level} onChange={next => saveProfile({ ...profile, ...next })}/><div className="settings-language"><span>{t("settings.plan")}</span>{profile.plan === "pro" ? <span className="plan-row"><strong className="pro-tag">PRO</strong><button className="text-button" onClick={() => saveProfile({ ...profile, plan: "free" })}>{t("settings.cancel_plan")}</button></span> : <button className="text-button" onClick={() => setModal({ kind: "pro" })}>{t("settings.see_pro")}</button>}</div><p className="settings-note">{t("settings.applies_new")}</p><p className="settings-note">{aiMode === "sample" ? t("settings.sample_no_key") : t("settings.server_ai")}<br/>{t("settings.local")}</p><p className="asset-credit">{t("settings.credit_illustration")}<br/>{t("settings.credit_photos")}</p></Modal>}
     {modal?.kind === "onboarding" && <Dialog label={t("onboarding.label")}><div className="onboarding">
-      <img src="/illustrations/mascot.svg" alt="" width={72} height={72}/>
       <h2>{t("onboarding.title")}</h2>
       <p className="onboarding-lead">{t("onboarding.lead")}</p>
       <ProfileFields lang={profile.lang} level={profile.level} onChange={next => setProfile({ ...profile, ...next })}/>

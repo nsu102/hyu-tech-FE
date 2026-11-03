@@ -17,7 +17,7 @@ export function HomeScreen({ books, onCapture, onSample, onOpen }: {
         <strong className="pre-line">{t("home.hero")}</strong>
         <span className="hero-cta"><Icon name="camera" size={17}/>{t("home.take_photo")}</span>
       </span>
-      <img src="/illustrations/mascot.svg" alt="" width={112} height={112} className="hero-mascot"/>
+      <span className="viewfinder viewfinder--hero" aria-hidden="true"><Icon name="camera" size={30}/></span>
     </button>
 
     <div className="section-heading"><h1>{t("library.title")}</h1><button className="icon-button soft" aria-label={t("home.new_book")} onClick={onCapture}><Icon name="plus" size={20}/></button></div>
