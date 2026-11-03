@@ -52,7 +52,7 @@ export function WordPhoto({ word, scene, className = "", eager = false }: {
       {c && size && <svg viewBox={`${c.x} ${c.y} ${c.w} ${c.h}`} preserveAspectRatio="xMidYMid slice" role="img" aria-label={`${word.korean} · ${word.translation}`}>
         <image href={visual.src} width={size.w} height={size.h}/>
         <rect className="object-ring" x={visual.bbox[0] * size.w} y={visual.bbox[1] * size.h} width={visual.bbox[2] * size.w} height={visual.bbox[3] * size.h}
-          rx={Math.min(visual.bbox[2] * size.w, visual.bbox[3] * size.h) * 0.12} vectorEffect="non-scaling-stroke"/>
+          rx={Math.min(visual.bbox[2] * size.w, visual.bbox[3] * size.h) * 0.04} vectorEffect="non-scaling-stroke"/>
       </svg>}
     </span>;
   }
