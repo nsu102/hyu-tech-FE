@@ -11,6 +11,7 @@ import { HomeScreen } from "./components/home-screen";
 import { CalendarSheet } from "./components/calendar-sheet";
 import { ProfileFields } from "./components/profile-fields";
 import { LangContext, translator, type T } from "./i18n";
+import { localizeBook } from "./i18n/content";
 import starterBooks from "./starter-books.json";
 
 type Screen = "home" | "library" | "capture" | "detail";
@@ -116,10 +117,11 @@ export default function TeumApp() {
   }, [screen]);
 
   function navigate(next: Screen) { setScreen(next); setError(""); }
-  function openBook(next: VocabularyBook) { setBook(next); setStudyIndex(0); setFlipped(false); setEditingTitle(false); navigate("detail"); }
+  function openBook(next: VocabularyBook) { setBook(localizeBook(next, profile.lang)); setStudyIndex(0); setFlipped(false); setEditingTitle(false); navigate("detail"); }
   function sample(type: SpaceType = "restaurant") { openBook(makeBook(type)); }
   function saveProfile(next: Profile) {
     setProfile(next);
+    setBook(b => b && localizeBook(b, next.lang));
     try { localStorage.setItem(PROFILE_KEY, JSON.stringify(next)); } catch { /* the choice still applies for this visit */ }
   }
   function persist(next: VocabularyBook[]) {
@@ -227,7 +229,8 @@ export default function TeumApp() {
   const bookCounts = new Map<string, number>();
   for (const b of books) { const d = seoulDate(b.createdAt); bookCounts.set(d, (bookCounts.get(d) ?? 0) + 1); }
   const saved = !!book && books.some(b => b.id === book.id);
-  const hasChanges = saved && JSON.stringify(books.find(b => b.id === book?.id)) !== JSON.stringify(book);
+  const stored = books.find(b => b.id === book?.id);
+  const hasChanges = saved && !!stored && JSON.stringify(localizeBook(stored, profile.lang)) !== JSON.stringify(book);
 
   return <LangContext.Provider value={profile.lang}>
     <div className={`app-shell screen-${screen}`}>
@@ -280,7 +283,7 @@ export default function TeumApp() {
         </div>
         <SwipeDeck words={book.words} scene={book.imageRef} index={wordIndex} revealed={flipped} onReveal={setFlipped} onIndexChange={next => { setStudyIndex(next); setFlipped(false); }} onEdit={() => setModal({ kind: "word", word: book.words[wordIndex] })} onSpeak={speak} onMore={more} moreBusy={moreBusy}/>
         <div className="detail-footer">
-          {!!book.cultureNotes.length && <button className="culture-notice" onClick={() => setModal({ kind: "culture" })} aria-label={t("detail.culture")}><Icon name="info" size={17}/><span>{book.cultureNotes[0].phraseKo}</span><Icon name="chevron" size={16}/></button>}
+          {!!book.cultureNotes.length && <button className="culture-notice" onClick={() => setModal({ kind: "culture" })} aria-label={t("detail.culture")}><Icon name="info" size={17}/><span><strong lang="ko">{book.cultureNotes[0].phraseKo}</strong><small>{book.cultureNotes[0].phraseTranslated}</small></span><Icon name="chevron" size={16}/></button>}
           <div className="detail-actions"><button className="button button-dark" onClick={saveBook} disabled={saved && !hasChanges}>{saved && !hasChanges ? t("detail.saved") : t("detail.save")}</button>{saved && <button className="icon-button" onClick={() => setModal({ kind: "delete", book })} aria-label={t("detail.delete")}><Icon name="trash" size={18}/></button>}</div>
         </div>
       </section>}
