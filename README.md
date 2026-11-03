@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 틈틈
 
-## Getting Started
+사진 기반 한국어 단어 학습 모바일 웹앱 프로토타입입니다. 제품 내용은 상위 폴더의 `SPACE_LEARNING_SPEC.md`, 화면은 사용자의 최신 단순화 요청을 기준으로 구성했습니다.
 
-First, run the development server:
+## 실행
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Node.js 20.9 이상에서 `npm install`, `npm run dev`를 실행하고 http://localhost:3000 을 엽니다. 검증은 `npm run lint`, `npm run build`로 진행합니다.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+실제 사진 분석을 쓰려면 `.env.example`을 `.env.local`로 복사하고 `OPENROUTER_API_KEY` 또는 `ANTHROPIC_API_KEY`를 넣은 뒤 개발 서버를 재시작합니다. 키가 없으면 `/api/vocab`이 503을 돌려주고 앱은 "샘플 모드"로 표시됩니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## AI 연결 (`src/app/api/vocab/route.ts`)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `step: "analyze"`: 사진 → 공간 추천(`confident`가 false면 사용자가 직접 선택).
+- `step: "generate"`: 사진 + 확정 공간 → 8~12개 단어(관찰/연관, bbox, iconKey). 기본 모델 Claude Haiku 5.5(`AI_MODEL`로 변경) + 구조화 출력(zod).
+- 서버 검증: 필수 필드, 중복 제거, observed만 유효 bbox·마커 번호, iconKey는 일러스트 목록 안에서만. 문화 안내는 모델이 만들지 않고 검토된 로컬 목록(`data.ts`)에서 붙입니다.
 
-## Learn More
+## 일러스트 에셋
 
-To learn more about Next.js, take a look at the following resources:
+`public/illustrations/*.svg` 42개(단어 아이콘 35 + 공간 5 + 마스코트 ‘틈이’). `node scripts/illustrations.mjs`로 다시 생성합니다. 같은 선 굵기·파스텔 배경·얼굴 스타일을 공유합니다.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 화면과 동작
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 순백색 배경, 최대 480px 모바일 화면. 홈은 단어집 목록과 추가 버튼만 표시합니다.
+- 상세와 복습을 한 화면으로 합쳤습니다. 카드 높이는 `50svh`이며, 상단 숫자는 실제 현재 위치 / 단어 수입니다.
+- `LearningCard`와 `SwipeDeck`을 분리했습니다. 탭으로 뜻·영한 예문, 좌우 스와이프·드래그·방향키·화살표로 이동합니다. 이동 시 답은 다시 숨깁니다.
+- 한국 문화는 하단 한 줄 안내를 누르면 바텀 시트에서 확인합니다. 별도 탭이나 중간 설명 문구가 없습니다.
+- 공간 사진은 제목 옆 썸네일에서 열며, 예시 사진의 번호를 누르면 해당 카드로 이동합니다.
+- 제목·단어·번역·예문 수정, 단어/문화 안내 제외, 저장과 단어집 삭제 확인을 지원합니다. 마지막 단어는 제외할 수 없습니다.
+- 사진 촬영/갤러리 선택, JPG/PNG/WebP 10MB 제한, 90도 회전, 최대 1400px JPEG 변환을 지원합니다. 사진은 서버로 전송하지 않습니다.
+- `localStorage`에 저장하고 새로고침 후 복원합니다. 같은 ID로 저장하면 갱신하며 중복하지 않습니다. 단어집 검색과 공간 필터도 제공합니다.
 
-## Deploy on Vercel
+## 이미지
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+커피 카드는 내장 이미지 생성 모델로 만든 `public/images/generated/coffee.png`를 사용합니다. 생성 프롬프트와 출처 기록은 같은 폴더의 `README.md`에 있습니다.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`Word.imageRef`에 생성된 이미지의 URL을 넣으면 우선 표시합니다. `imageOrigin`과 `imageStatus`로 출처와 준비/완료/실패 상태를 표현할 수 있습니다. 이미지가 없는 기존 데이터는 공간 사진 크롭과 로컬 참고 사진으로 표시합니다. 사진·글꼴 라이선스는 `CREDITS.md`에 있습니다.
+
+## 프로토타입 범위
+
+실시간 이미지 분석, 런타임 이미지 생성 API, 로그인, 서버 저장은 연결하지 않았습니다. 공간별 8개 샘플 단어와 문화 안내를 사용합니다. 업로드 사진을 실제 분석했다고 표시하거나 관찰 마커를 임의로 만들지 않습니다. 기기 발음은 브라우저 `speechSynthesis`를 사용합니다.
+
+서버 연동 시 `generate`의 샘플 생성 부분을 분석/이미지 생성 작업 API로, `persist`를 인증된 저장 API로 교체하면 됩니다. API 키는 서버에만 둡니다.
+
+## 디자인과 검증
+
+`design-taste-frontend`를 설치·적용했습니다. 사용자 요청에 따라 캐치프레이즈, 설명용 소제목, 별도 학습 화면, 상세 탭, 장식 요소를 제거했습니다. 방향과 브라우저 검증은 `.taste-skill/design-notes.md`에 기록했습니다.

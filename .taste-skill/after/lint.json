@@ -1,0 +1,13 @@
+{
+ "files": 12,
+ "findings": [
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 305,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  }
+ ]
+}

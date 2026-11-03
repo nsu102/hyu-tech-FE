@@ -1,0 +1,373 @@
+{
+ "files": 11,
+ "findings": [
+  {
+   "level": "WARN",
+   "id": "numbering",
+   "file": "src/app/components/learning-card.tsx",
+   "line": 19,
+   "match": "padStart(2, \"0\")",
+   "message": "Zero-padding in script. Fine for a clock, a date or a price; if it builds 01 / 02 / 03 labels, remove it."
+  },
+  {
+   "level": "WARN",
+   "id": "numbering",
+   "file": "src/app/components/learning-card.tsx",
+   "line": 22,
+   "match": "padStart(2, \"0\")",
+   "message": "Zero-padding in script. Fine for a clock, a date or a price; if it builds 01 / 02 / 03 labels, remove it."
+  },
+  {
+   "level": "WARN",
+   "id": "numbering",
+   "file": "src/app/components/learning-card.tsx",
+   "line": 25,
+   "match": "padStart(2, \"0\")",
+   "message": "Zero-padding in script. Fine for a clock, a date or a price; if it builds 01 / 02 / 03 labels, remove it."
+  },
+  {
+   "level": "FAIL",
+   "id": "claude-palette",
+   "file": "src/app/globals.css",
+   "line": 11,
+   "match": "#faf9f5",
+   "message": "Claude-brand cream / terracotta colour."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 90,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "FAIL",
+   "id": "claude-palette",
+   "file": "src/app/globals.css",
+   "line": 102,
+   "match": "#f0eee6",
+   "message": "Claude-brand cream / terracotta colour."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 178,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/globals.css",
+   "line": 209,
+   "match": ".eyebrow {",
+   "message": "Eyebrow / kicker label above a heading."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 306,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 339,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 347,
+   "match": "drop-shadow(",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 351,
+   "match": "drop-shadow(",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 367,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 390,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 424,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/globals.css",
+   "line": 476,
+   "match": ".eyebrow {",
+   "message": "Eyebrow / kicker label above a heading."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 521,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "glass",
+   "file": "src/app/globals.css",
+   "line": 647,
+   "match": "backdrop-filter:",
+   "message": "Backdrop blur. One sticky bar at most; glass cards are a tell."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 690,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 937,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/globals.css",
+   "line": 1016,
+   "match": ".eyebrow {",
+   "message": "Eyebrow / kicker label above a heading."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 1282,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 1292,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "glass",
+   "file": "src/app/globals.css",
+   "line": 1307,
+   "match": "backdrop-filter:",
+   "message": "Backdrop blur. One sticky bar at most; glass cards are a tell."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 1686,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "glass",
+   "file": "src/app/globals.css",
+   "line": 1692,
+   "match": "backdrop-filter:",
+   "message": "Backdrop blur. One sticky bar at most; glass cards are a tell."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 1773,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "glass",
+   "file": "src/app/globals.css",
+   "line": 1779,
+   "match": "backdrop-filter:",
+   "message": "Backdrop blur. One sticky bar at most; glass cards are a tell."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 1960,
+   "match": "drop-shadow(",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 1974,
+   "match": "drop-shadow(",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 1978,
+   "match": "drop-shadow(",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 2049,
+   "match": "drop-shadow(",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 2075,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/globals.css",
+   "line": 2265,
+   "match": ".eyebrow {",
+   "message": "Eyebrow / kicker label above a heading."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 2319,
+   "match": "box-shadow:",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "shadow",
+   "file": "src/app/globals.css",
+   "line": 2375,
+   "match": "drop-shadow(",
+   "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/teum-app.tsx",
+   "line": 161,
+   "match": "className=\"hero-eyebrow",
+   "message": "Eyebrow / kicker label above a heading."
+  },
+  {
+   "level": "WARN",
+   "id": "numbering",
+   "file": "src/app/teum-app.tsx",
+   "line": 166,
+   "match": ">01<",
+   "message": "Decorative index numbering (01 / 02 / 03)."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/teum-app.tsx",
+   "line": 177,
+   "match": "className=\"eyebrow",
+   "message": "Eyebrow / kicker label above a heading."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/teum-app.tsx",
+   "line": 183,
+   "match": "className=\"phrase-kicker",
+   "message": "Eyebrow / kicker label above a heading."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/teum-app.tsx",
+   "line": 214,
+   "match": "className=\"eyebrow",
+   "message": "Eyebrow / kicker label above a heading."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/teum-app.tsx",
+   "line": 240,
+   "match": "className=\"eyebrow",
+   "message": "Eyebrow / kicker label above a heading."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/teum-app.tsx",
+   "line": 241,
+   "match": "className=\"eyebrow",
+   "message": "Eyebrow / kicker label above a heading."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/teum-app.tsx",
+   "line": 252,
+   "match": "className=\"eyebrow",
+   "message": "Eyebrow / kicker label above a heading."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/teum-app.tsx",
+   "line": 254,
+   "match": "className=\"eyebrow",
+   "message": "Eyebrow / kicker label above a heading."
+  },
+  {
+   "level": "WARN",
+   "id": "eyebrow",
+   "file": "src/app/teum-app.tsx",
+   "line": 265,
+   "match": "className=\"eyebrow",
+   "message": "Eyebrow / kicker label above a heading."
+  }
+ ]
+}

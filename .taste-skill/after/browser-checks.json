@@ -1,0 +1,45 @@
+{
+  "production": "http://127.0.0.1:3002/",
+  "viewports": [
+    {
+      "body": "rgb(255, 255, 255)",
+      "brokenImages": [],
+      "fontLoaded": true,
+      "h1Count": 1,
+      "height": 900,
+      "overflow": false,
+      "shell": "rgb(255, 255, 255)",
+      "width": 1440
+    },
+    {
+      "body": "rgb(255, 255, 255)",
+      "brokenImages": [],
+      "fontLoaded": true,
+      "h1Count": 1,
+      "height": 1024,
+      "overflow": false,
+      "shell": "rgb(255, 255, 255)",
+      "width": 768
+    },
+    {
+      "body": "rgb(255, 255, 255)",
+      "brokenImages": [],
+      "fontLoaded": true,
+      "h1Count": 1,
+      "height": 844,
+      "overflow": false,
+      "shell": "rgb(255, 255, 255)",
+      "width": 390
+    }
+  ],
+  "checks": [
+    "capture entry",
+    "photo marker opens associated word",
+    "two bilingual culture notes and references",
+    "save same book twice creates one row",
+    "settings modal",
+    "swipe changes word and hides answer",
+    "navigation controls above bottom bar",
+    "no console warnings or errors"
+  ]
+}
