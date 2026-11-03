@@ -8,9 +8,10 @@ import { Icon } from "./icons";
 import { SwipeDeck } from "./components/swipe-deck";
 import type { VocabResponse } from "./api/vocab/route";
 import { HomeScreen } from "./components/home-screen";
+import { CalendarSheet } from "./components/calendar-sheet";
 
 type Screen = "home" | "library" | "capture" | "detail";
-type ModalState = { kind: "settings" } | { kind: "culture" } | { kind: "scene" } | { kind: "word"; word: Word } | { kind: "delete"; book: VocabularyBook } | null;
+type ModalState = { kind: "settings" } | { kind: "calendar" } | { kind: "culture" } | { kind: "scene" } | { kind: "word"; word: Word } | { kind: "delete"; book: VocabularyBook } | null;
 
 function Modal({ children, onClose, label }: { children: ReactNode; onClose: () => void; label: string }) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -179,6 +180,8 @@ export default function TeumApp() {
   }
   const wordIndex = Math.min(studyIndex, (book?.words.length ?? 1) - 1);
   const filtered = books.filter(b => (!date || seoulDate(b.createdAt) === date) && `${b.title} ${b.words.map(w => `${w.korean} ${w.translation}`).join(" ")}`.toLowerCase().includes(query.toLowerCase()));
+  const bookCounts = new Map<string, number>();
+  for (const b of books) { const d = seoulDate(b.createdAt); bookCounts.set(d, (bookCounts.get(d) ?? 0) + 1); }
   const saved = !!book && books.some(b => b.id === book.id);
   const hasChanges = saved && JSON.stringify(books.find(b => b.id === book?.id)) !== JSON.stringify(book);
 
@@ -218,7 +221,7 @@ export default function TeumApp() {
       {screen === "library" && <section className="library-page page-enter content-pad">
         <div className="library-heading"><h1 className="page-title">내 단어집</h1><div className="collection-count">{books.length}<small>개 단어집</small></div></div>
         <div className="search-row"><label className="search-box"><Icon name="search" size={19}/><input value={query} onChange={e => setQuery(e.target.value)} placeholder="공간, 한국어, 영어로 찾아보기" aria-label="단어집 검색"/>{query && <button className="icon-button" onClick={() => setQuery("")} aria-label="검색 지우기"><Icon name="close" size={16}/></button>}</label>
-        <label className={`calendar-button ${date ? "active" : ""}`} aria-label="날짜로 찾기"><Icon name="calendar" size={20}/><input type="date" value={date} max={seoulDate(new Date().toISOString())} onChange={e => setDate(e.target.value)} onClick={e => { try { e.currentTarget.showPicker(); } catch {} }}/></label></div>
+        <button className={`calendar-button ${date ? "active" : ""}`} aria-label="달력에서 날짜로 찾기" onClick={() => setModal({ kind: "calendar" })}><Icon name="calendar" size={20}/></button></div>
         {date && <button className="date-pill" onClick={() => setDate("")} aria-label="날짜 선택 해제">{Number(date.slice(5, 7))}월 {Number(date.slice(8))}일<Icon name="close" size={14}/></button>}
         {!ready ? <div className="empty-state"><span className="spinner"/>단어집을 불러오고 있어요.</div> : filtered.length ? <div className="book-list">{filtered.map(b => <BookRow key={b.id} book={b} onOpen={() => openBook(b)}/>)}</div> : <div className="empty-state"><p>{books.length ? "검색 결과가 없습니다." : "저장한 단어집이 없습니다."}</p><button className="text-button" onClick={() => books.length ? (setQuery(""), setDate("")) : navigate("capture")}>{books.length ? "전체 보기" : "사진 추가"}</button></div>}
 
@@ -243,6 +246,7 @@ export default function TeumApp() {
     </div>
     {toast && <div className="toast" role="status"><Icon name="info" size={18}/>{toast}<button onClick={() => setToast("")} aria-label="알림 닫기"><Icon name="close" size={16}/></button></div>}
     {modal?.kind === "settings" && <Modal label="설정" onClose={() => setModal(null)}><h2>설정</h2><div className="settings-language"><span>번역 언어</span><strong>English</strong></div><p className="settings-note">{aiMode === "sample" ? "샘플 모드 · 서버에 AI 키가 설정되지 않았어요." : "사진 분석은 Claude API로 서버에서 처리해요."}<br/>단어집은 이 브라우저에 저장됩니다. 계정 동기화는 아직 없어요.</p><p className="asset-credit">일러스트는 이 프로젝트용으로 직접 제작했어요.<br/>공간 예시 사진: Unsplash</p></Modal>}
+    {modal?.kind === "calendar" && <Modal label="날짜로 찾기" onClose={() => setModal(null)}><h2>날짜로 찾기</h2><CalendarSheet counts={bookCounts} value={date} today={seoulDate(new Date().toISOString())} onPick={d => { setDate(d); setModal(null); }}/>{date && <button className="button button-outline" onClick={() => { setDate(""); setModal(null); }}>전체 보기</button>}</Modal>}
     {modal?.kind === "scene" && book && <Modal label="공간 사진" onClose={() => setModal(null)}><h2>공간 사진</h2><div className="marked-photo"><img src={book.imageRef} alt={book.title}/>{book.words.map(w => w.bbox && w.source === "observed" && validBox(w.bbox) && <button key={w.id} className={`photo-marker ${book.words[wordIndex].id === w.id ? "active" : ""}`} style={{ left: `${(w.bbox[0] + w.bbox[2] / 2) * 100}%`, top: `${(w.bbox[1] + w.bbox[3] / 2) * 100}%` }} onClick={() => selectWord(w)} aria-label={`${w.markerNumber}번 ${w.korean} 단어 보기`}>{w.markerNumber}</button>)}</div><p className="settings-note">{book.sample ? "샘플 모드 · 사진 분석 결과가 아니에요." : `AI 분석 · ${book.aiModel ?? ""}`}</p></Modal>}
     {modal?.kind === "culture" && book && <Modal label="한국 문화" onClose={() => setModal(null)}><h2>한국 문화</h2>{book.cultureNotes.map(c => <article className="culture-card" key={c.id}><div className="culture-card-heading"><h3>{c.titleKo}</h3><button className="icon-button" aria-label={`${c.titleKo} 제외`} onClick={() => setBook({ ...book, cultureNotes: book.cultureNotes.filter(n => n.id !== c.id) })}><Icon name="close" size={16}/></button></div><p className="culture-title-en" lang="en">{c.titleTranslated}</p><p>{c.descriptionKo}</p><p className="culture-english" lang="en">{c.descriptionTranslated}</p><button className="culture-phrase" onClick={() => speak(c.phraseKo)}><span><strong>{c.phraseKo}</strong><small lang="en">{c.phraseTranslated}</small></span><Icon name="volume" size={18}/></button><p className="qualification">{c.qualificationKo}<br/><span lang="en">{c.qualificationTranslated}</span></p>{c.sourceIds.map(id => { const source = cultureSources.find(item => item.id === id); return source ? <a key={id} className="source-link" href={source.url} target="_blank" rel="noreferrer">{source.title} ↗</a> : null; })}</article>)}{!book.cultureNotes.length && <p className="settings-note">문화 안내가 없습니다.</p>}</Modal>}
 

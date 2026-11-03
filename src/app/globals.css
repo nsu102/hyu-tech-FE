@@ -134,7 +134,21 @@ input,textarea{min-width:0}
 .calendar-button{position:relative;display:grid;place-items:center;flex:0 0 48px;height:48px;border-radius:50%;background:var(--surface);box-shadow:var(--shadow);color:var(--muted);cursor:pointer}
 .calendar-button.active{background:var(--ink);color:white}
 .calendar-button:focus-within{outline:3px solid #ffb8a8}
-.calendar-button>input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.calendar{margin:-4px 0 18px}
+.calendar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.calendar-head>strong{font-size:16px;font-weight:800}
+.calendar-head>.icon-button{background:#f6f0ea}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.calendar-weekday{padding:6px 0;font-size:11px;font-weight:700;color:var(--muted)}
+.calendar-weekday:first-child{color:var(--accent)}
+.calendar-day{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1;border-radius:50%;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.calendar-day:disabled{color:#c9c1d1;font-weight:500;background:none}
+.calendar-day:not(:disabled):hover{background:var(--accent-soft)}
+.calendar-day.today{box-shadow:inset 0 0 0 1.5px var(--control)}
+.calendar-day.selected{background:var(--accent);color:white}
+.calendar-dot{position:absolute;bottom:14%;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.calendar-day.selected .calendar-dot{background:white}
+.calendar-foot{margin-top:12px;text-align:center;font-size:12px;color:var(--muted)}
 .date-pill{display:inline-flex;align-items:center;gap:6px;height:32px;margin:-4px 0 14px;padding:0 10px 0 14px;border-radius:999px;background:var(--ink);color:white;font-size:13px;font-weight:600}
 .empty-state{display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 0;text-align:center;color:var(--muted);font-size:14px}
 .book-list{display:flex;flex-direction:column;gap:10px}
@@ -178,6 +192,7 @@ input,textarea{min-width:0}
 .word-photo{display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .word-photo>img{width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none}
 .word-photo>svg{width:100%;height:100%}
+.learning-card-photo.word-photo--crop{border-radius:20px;background:#f3ede7}
 .learning-card-photo{flex:0 1 58%;width:100%;height:58%;max-height:58%;min-height:0;margin:0 0 14px;transition:height 260ms,max-height 260ms,flex-basis 260ms}
 .learning-card-photo.word-photo--generated>img{border-radius:20px}
 .learning-card-korean{font-size:38px;font-weight:800;line-height:1.2;letter-spacing:-1.2px}
