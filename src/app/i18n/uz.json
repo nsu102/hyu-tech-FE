@@ -123,7 +123,6 @@
   "scene.title": "Rasm",
   "scene.marker": "{n}-so‘z: {word}",
   "scene.sample": "Namuna rejimi · rasm tahlili natijasi emas.",
-  "scene.ai": "AI tahlili · {model}",
   "culture.title": "Koreys madaniyati",
   "culture.remove": "{name} ni olib tashlash",
   "culture.empty": "Madaniyat izohlari yo‘q.",

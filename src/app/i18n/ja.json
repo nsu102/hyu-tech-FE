@@ -123,7 +123,6 @@
   "scene.title": "写真",
   "scene.marker": "{n}番の単語：{word}",
   "scene.sample": "サンプルモード · 写真の分析結果ではありません。",
-  "scene.ai": "AI 分析 · {model}",
   "culture.title": "韓国文化",
   "culture.remove": "{name} を除外",
   "culture.empty": "文化の案内はありません。",

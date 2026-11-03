@@ -123,7 +123,6 @@
   "scene.title": "照片",
   "scene.marker": "第 {n} 个单词：{word}",
   "scene.sample": "示例模式 · 并非照片分析结果。",
-  "scene.ai": "AI 分析 · {model}",
   "culture.title": "韩国文化",
   "culture.remove": "移除 {name}",
   "culture.empty": "没有文化说明。",

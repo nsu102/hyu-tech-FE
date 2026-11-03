@@ -123,7 +123,6 @@
   "scene.title": "Зураг",
   "scene.marker": "{n}-р үг: {word}",
   "scene.sample": "Жишээ горим · зургийн шинжилгээ биш.",
-  "scene.ai": "AI шинжилгээ · {model}",
   "culture.title": "Солонгос соёл",
   "culture.remove": "{name}-г хасах",
   "culture.empty": "Соёлын тайлбар алга.",
