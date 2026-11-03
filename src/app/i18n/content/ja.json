@@ -132,5 +132,12 @@
   "walking path": "散歩道",
   "willow tree": "柳の木",
   "window": "窓",
-  "wooden deck": "木のデッキ"
+  "wooden deck": "木のデッキ",
+  "Order at the counter, wait for the buzzer": "カウンターで注文して、呼び出しベルを待とう",
+  "In Korean cafés you usually order and pay at the counter first. You may get a buzzer: take a seat, and when it goes off, pick up your drink.": "韓国のカフェでは、まずカウンターで注文して支払うのが一般的です。呼び出しベルを渡されたら席で待ち、鳴ったら飲み物を取りに行きましょう。",
+  "One iced americano, please.": "アイスアメリカーノを一つください。",
+  "Every café works a little differently, and many use ordering kiosks.": "お店によってやり方は少しずつ違い、キオスクで注文する店も多いです。",
+  "“For here or to go?”": "「店内でお召し上がりですか？」",
+  "When you order, staff often ask ‘deusigo gaseyo?’ (for here?). Say ‘yeogiseo masilgeyo’ to stay, or ‘pojanghae juseyo’ to take it away.": "注文するとき、店員さんはよく‘deusigo gaseyo?’（店内で？）と聞きます。店内なら‘yeogiseo masilgeyo’、持ち帰りなら‘pojanghae juseyo’と言えば大丈夫です。",
+  "Saying ‘takeout’ works too.": "‘テイクアウトで’と言っても通じます。"
 }
