@@ -15,7 +15,6 @@ export function CalendarSheet({ counts, value, today, onPick }: {
   const first = new Date(Date.UTC(month.y, month.m, 1)).getUTCDay();
   const days = new Date(Date.UTC(month.y, month.m + 1, 0)).getUTCDate();
   const shift = (delta: number) => setMonth(({ y, m }) => ({ y: y + Math.floor((m + delta) / 12), m: (m + delta + 12) % 12 }));
-  const monthTotal = [...counts].filter(([d]) => d.startsWith(`${month.y}-${pad(month.m + 1)}`)).reduce((n, [, c]) => n + c, 0);
 
   return <div className="calendar">
     <div className="calendar-head">
@@ -34,6 +33,5 @@ export function CalendarSheet({ counts, value, today, onPick }: {
         </button>;
       })}
     </div>
-    <p className="calendar-foot">{monthTotal ? `이번 달 단어집 ${monthTotal}개 · 점이 있는 날을 눌러 보세요` : "이 달에는 만든 단어집이 없어요"}</p>
   </div>;
 }
