@@ -7,7 +7,7 @@ export type BBox = [number, number, number, number];
 export type Word = {
   id: string; korean: string; translation: string; roman: string;
   exampleKo: string; exampleTranslated: string;
-  source: "observed" | "related"; bbox: BBox | null; markerNumber: number | null; iconKey: IconKey | null; photoKey?: string;
+  source: "observed" | "related" | "expression"; bbox: BBox | null; markerNumber: number | null; iconKey: IconKey | null; photoKey?: string;
   imageRef?: string; imageOrigin?: "generated" | "reference"; imageStatus?: "pending" | "ready" | "failed";
 };
 export type CultureNote = {
@@ -15,7 +15,7 @@ export type CultureNote = {
   phraseKo: string; phraseTranslated: string; qualificationKo: string; qualificationTranslated: string; sourceIds: string[];
 };
 export type VocabularyBook = {
-  id: string; title: string; spaceType: SpaceType; spaceDescription: string; translationLanguage: "en";
+  id: string; title: string; spaceType: SpaceType; spaceDescription: string; translationLanguage: string;
   imageRef: string; words: Word[]; cultureNotes: CultureNote[]; createdAt: string; updatedAt: string; sample: boolean; aiModel?: string;
 };
 export const spaces: { id: SpaceType; name: string; english: string; photo: string; tint: string }[] = [
@@ -117,3 +117,20 @@ export function makeBook(type: SpaceType, imageRef?: string, description = ""): 
   };
 }
 export const STORAGE_KEY = "teumteum:books:v1";
+
+// Onboarding choices. `prompt` is what the model is told; the language list is what the server accepts.
+export const languages = [
+  { code: "en", name: "English", prompt: "English" }, { code: "zh", name: "中文", prompt: "Simplified Chinese" },
+  { code: "ja", name: "日本語", prompt: "Japanese" }, { code: "vi", name: "Tiếng Việt", prompt: "Vietnamese" },
+  { code: "mn", name: "Монгол", prompt: "Mongolian (Cyrillic)" }, { code: "uz", name: "Oʻzbek", prompt: "Uzbek (Latin)" },
+  { code: "es", name: "Español", prompt: "Spanish" }, { code: "fr", name: "Français", prompt: "French" },
+] as const;
+export type Language = typeof languages[number]["code"];
+export const levels = [
+  { id: "beginner", name: "초급", hint: "TOPIK 1–2 · 기본 단어", prompt: "beginner (TOPIK 1–2): basic everyday nouns and verbs, very short 해요체 example sentences" },
+  { id: "intermediate", name: "중급", hint: "TOPIK 3–4 · 생활 표현", prompt: "intermediate (TOPIK 3–4): more specific nouns, common verbs and set phrases, natural sentences with connectives" },
+  { id: "advanced", name: "고급", hint: "TOPIK 5–6 · 한자어·관용 표현", prompt: "advanced (TOPIK 5–6): precise and Sino-Korean vocabulary, formal and colloquial nuance, richer example sentences" },
+] as const;
+export type Level = typeof levels[number]["id"];
+export type Profile = { lang: Language; level: Level; plan: "free" | "pro" };
+export const PROFILE_KEY = "teumteum:profile:v1";

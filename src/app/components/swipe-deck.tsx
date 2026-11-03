@@ -5,10 +5,10 @@ import type { Word } from "../data";
 import { Icon } from "../icons";
 import { LearningCard } from "./learning-card";
 
-export function SwipeDeck({ words, scene, index, revealed, onReveal, onIndexChange, onEdit, onSpeak }: {
+export function SwipeDeck({ words, scene, index, revealed, onReveal, onIndexChange, onEdit, onSpeak, onMore, moreBusy }: {
   words: Word[]; scene: string; index: number; revealed: boolean;
   onReveal: (revealed: boolean) => void; onIndexChange: (index: number) => void;
-  onEdit: () => void; onSpeak: (text: string) => void;
+  onEdit: () => void; onSpeak: (text: string) => void; onMore: () => void; moreBusy: boolean;
 }) {
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
@@ -51,7 +51,7 @@ export function SwipeDeck({ words, scene, index, revealed, onReveal, onIndexChan
   return <div className="swipe-deck" role="region" aria-roledescription="카드 모음" aria-label="단어 학습 카드" onKeyDown={event => {
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") { event.preventDefault(); change(index + (event.key === "ArrowRight" ? 1 : -1)); }
   }}>
-    <div className="deck-toolbar"><span className="deck-progress" aria-live="polite"><span className="deck-bar"><span style={{ width: `${(index + 1) / words.length * 100}%` }}/></span>{index + 1} / {words.length}</span><button className="icon-button" onClick={onEdit} aria-label={`${words[index].korean} 단어 수정`}><Icon name="edit" size={18}/></button></div>
+    <div className="deck-toolbar"><span className="deck-progress" aria-live="polite"><span className="deck-bar"><span style={{ width: `${(index + 1) / words.length * 100}%` }}/></span>{index + 1} / {words.length}</span><span className="deck-tools"><button className="more-button" onClick={onMore} disabled={moreBusy} aria-label="단어 더 만들기 (Pro)">{moreBusy ? <span className="spinner"/> : <Icon name="plus" size={16}/>}<b>PRO</b></button><button className="icon-button" onClick={onEdit} aria-label={`${words[index].korean} 단어 수정`}><Icon name="edit" size={18}/></button></span></div>
     <div className={`swipe-surface ${dragging ? "is-dragging" : ""}`} style={style} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={event => end(event)} onPointerCancel={event => end(event, true)} onClickCapture={event => { if (suppressClick.current) { event.preventDefault(); event.stopPropagation(); suppressClick.current = false; } }}>
       <div className="swipe-moving-card"><LearningCard word={words[index]} scene={scene} revealed={revealed} onReveal={onReveal} onSpeak={onSpeak}/></div>
     </div>
