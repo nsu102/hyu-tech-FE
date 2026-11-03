@@ -1,0 +1,458 @@
+[
+ {
+  "id": "example-lake-park",
+  "title": "호수공원 산책로",
+  "spaceType": "other",
+  "spaceDescription": "",
+  "translationLanguage": "en",
+  "imageRef": "/images/examples/lake-park.jpg",
+  "words": [
+   {
+    "id": "w-0",
+    "korean": "벤치",
+    "translation": "bench",
+    "roman": "benchi",
+    "exampleKo": "저기 벤치에 앉아서 쉬어요.",
+    "exampleTranslated": "I sit on the bench over there and rest.",
+    "source": "observed",
+    "bbox": [
+     0.01,
+     0.73,
+     0.3,
+     0.27
+    ],
+    "markerNumber": 1,
+    "iconKey": "chair"
+   },
+   {
+    "id": "w-1",
+    "korean": "나무",
+    "translation": "tree",
+    "roman": "namu",
+    "exampleKo": "이 나무는 아주 커요.",
+    "exampleTranslated": "This tree is very big.",
+    "source": "observed",
+    "bbox": [
+     0,
+     0,
+     0.56,
+     0.75
+    ],
+    "markerNumber": 2,
+    "iconKey": null
+   },
+   {
+    "id": "w-2",
+    "korean": "난간",
+    "translation": "railing",
+    "roman": "nangan",
+    "exampleKo": "난간을 잡고 걸어요.",
+    "exampleTranslated": "I walk while holding the railing.",
+    "source": "observed",
+    "bbox": [
+     0.15,
+     0.62,
+     0.85,
+     0.23
+    ],
+    "markerNumber": 3,
+    "iconKey": null
+   },
+   {
+    "id": "w-3",
+    "korean": "데크",
+    "translation": "wooden deck",
+    "roman": "deikeu",
+    "exampleKo": "데크 위를 천천히 걸어요.",
+    "exampleTranslated": "I walk slowly on the wooden deck.",
+    "source": "observed",
+    "bbox": [
+     0,
+     0.69,
+     1,
+     0.31
+    ],
+    "markerNumber": 4,
+    "iconKey": null
+   },
+   {
+    "id": "w-4",
+    "korean": "호수",
+    "translation": "lake",
+    "roman": "hosu",
+    "exampleKo": "호수가 정말 예뻐요.",
+    "exampleTranslated": "The lake is really pretty.",
+    "source": "observed",
+    "bbox": [
+     0.35,
+     0.62,
+     0.65,
+     0.18
+    ],
+    "markerNumber": 5,
+    "iconKey": null
+   },
+   {
+    "id": "w-5",
+    "korean": "아파트",
+    "translation": "apartment building",
+    "roman": "apateu",
+    "exampleKo": "저 아파트에 친구가 살아요.",
+    "exampleTranslated": "My friend lives in that apartment building.",
+    "source": "observed",
+    "bbox": [
+     0.62,
+     0.3,
+     0.38,
+     0.25
+    ],
+    "markerNumber": 6,
+    "iconKey": null
+   },
+   {
+    "id": "w-6",
+    "korean": "버드나무",
+    "translation": "willow tree",
+    "roman": "beodeunamu",
+    "exampleKo": "호숫가에 버드나무가 있어요.",
+    "exampleTranslated": "There is a willow tree by the lake.",
+    "source": "observed",
+    "bbox": [
+     0.47,
+     0.37,
+     0.11,
+     0.24
+    ],
+    "markerNumber": 7,
+    "iconKey": null
+   },
+   {
+    "id": "w-7",
+    "korean": "잔디",
+    "translation": "grass",
+    "roman": "jandi",
+    "exampleKo": "잔디가 아주 푸르러요.",
+    "exampleTranslated": "The grass is very green.",
+    "source": "observed",
+    "bbox": [
+     0.2,
+     0.58,
+     0.8,
+     0.1
+    ],
+    "markerNumber": 8,
+    "iconKey": null
+   },
+   {
+    "id": "w-8",
+    "korean": "산책로",
+    "translation": "walking path",
+    "roman": "sanchaengno",
+    "exampleKo": "저녁에 산책로를 걸어요.",
+    "exampleTranslated": "I walk the path in the evening.",
+    "source": "related",
+    "bbox": null,
+    "markerNumber": null,
+    "iconKey": null
+   },
+   {
+    "id": "w-9",
+    "korean": "공원",
+    "translation": "park",
+    "roman": "gongwon",
+    "exampleKo": "주말에 공원에 가요.",
+    "exampleTranslated": "I go to the park on weekends.",
+    "source": "related",
+    "bbox": null,
+    "markerNumber": null,
+    "iconKey": "place"
+   },
+   {
+    "id": "w-10",
+    "korean": "그늘",
+    "translation": "shade",
+    "roman": "geuneul",
+    "exampleKo": "더운 날에는 그늘에서 쉬어요.",
+    "exampleTranslated": "On hot days, I rest in the shade.",
+    "source": "related",
+    "bbox": null,
+    "markerNumber": null,
+    "iconKey": null
+   },
+   {
+    "id": "w-11",
+    "korean": "쉬다",
+    "translation": "to rest",
+    "roman": "swida",
+    "exampleKo": "벤치에서 잠깐 쉬어요.",
+    "exampleTranslated": "I rest on the bench for a while.",
+    "source": "related",
+    "bbox": null,
+    "markerNumber": null,
+    "iconKey": "rest"
+   }
+  ],
+  "cultureNotes": [
+   {
+    "id": "help",
+    "titleKo": "도움이 필요할 때, 한마디",
+    "titleTranslated": "A little phrase goes a long way",
+    "descriptionKo": "한국어가 아직 익숙하지 않아도 괜찮아요. 도움이 필요할 때 이 표현으로 정중하게 부탁해 보세요.",
+    "descriptionTranslated": "It is okay if Korean still feels unfamiliar. Try this polite expression when you need help.",
+    "phraseKo": "좀 도와주실 수 있나요?",
+    "phraseTranslated": "Could you help me, please?",
+    "qualificationKo": "상대와 상황에 따라 더 자연스러운 표현은 달라질 수 있어요.",
+    "qualificationTranslated": "The most natural wording may vary with the person and situation.",
+    "sourceIds": [
+     "study-in-korea-guide"
+    ]
+   },
+   {
+    "id": "thanks",
+    "titleKo": "작은 고마움도 말로 전해요",
+    "titleTranslated": "A small thank-you, a warm connection",
+    "descriptionKo": "도움을 받았다면 ‘감사합니다’라고 말해 보세요. 처음 만난 사람에게도 사용할 수 있는 정중한 감사 표현이에요.",
+    "descriptionTranslated": "Try saying ‘gamsahamnida’ after someone helps you. It is a polite way to thank someone, including a person you have just met.",
+    "phraseKo": "감사합니다.",
+    "phraseTranslated": "Thank you.",
+    "qualificationKo": "관계와 상황에 따라 다른 감사 표현을 쓸 수도 있어요.",
+    "qualificationTranslated": "Other expressions of thanks may suit different relationships and situations.",
+    "sourceIds": [
+     "study-in-korea-guide"
+    ]
+   }
+  ],
+  "createdAt": "2026-11-03T04:33:18.744Z",
+  "updatedAt": "2026-11-03T04:33:49.777Z",
+  "sample": false,
+  "aiModel": "anthropic/claude-haiku-5.5"
+ },
+ {
+  "id": "example-lecture-room",
+  "title": "대학교 강의실",
+  "spaceType": "classroom",
+  "spaceDescription": "",
+  "translationLanguage": "en",
+  "imageRef": "/images/examples/lecture-room.jpg",
+  "words": [
+   {
+    "id": "w-0",
+    "korean": "칠판",
+    "translation": "blackboard",
+    "roman": "chilpan",
+    "exampleKo": "칠판에 글씨가 잘 보여요.",
+    "exampleTranslated": "I can see the writing on the board well.",
+    "source": "observed",
+    "bbox": [
+     0.42,
+     0.08,
+     0.58,
+     0.28
+    ],
+    "markerNumber": 1,
+    "iconKey": "board"
+   },
+   {
+    "id": "w-1",
+    "korean": "책상",
+    "translation": "desk",
+    "roman": "chaeksang",
+    "exampleKo": "책상 위에 책이 있어요.",
+    "exampleTranslated": "There is a book on the desk.",
+    "source": "observed",
+    "bbox": [
+     0,
+     0.55,
+     0.78,
+     0.45
+    ],
+    "markerNumber": 2,
+    "iconKey": "desk"
+   },
+   {
+    "id": "w-2",
+    "korean": "의자",
+    "translation": "chair",
+    "roman": "uija",
+    "exampleKo": "이 의자에 앉아도 돼요?",
+    "exampleTranslated": "May I sit on this chair?",
+    "source": "observed",
+    "bbox": [
+     0.68,
+     0.49,
+     0.3,
+     0.51
+    ],
+    "markerNumber": 3,
+    "iconKey": "chair"
+   },
+   {
+    "id": "w-3",
+    "korean": "책",
+    "translation": "book",
+    "roman": "chaek",
+    "exampleKo": "책을 펴 주세요.",
+    "exampleTranslated": "Please open your book.",
+    "source": "observed",
+    "bbox": [
+     0,
+     0.57,
+     0.47,
+     0.19
+    ],
+    "markerNumber": 4,
+    "iconKey": "book"
+   },
+   {
+    "id": "w-4",
+    "korean": "창문",
+    "translation": "window",
+    "roman": "changmun",
+    "exampleKo": "창문 좀 열어도 될까요?",
+    "exampleTranslated": "Could I open the window?",
+    "source": "observed",
+    "bbox": [
+     0,
+     0,
+     0.25,
+     0.36
+    ],
+    "markerNumber": 5,
+    "iconKey": null
+   },
+   {
+    "id": "w-5",
+    "korean": "교탁",
+    "translation": "lectern",
+    "roman": "gyotak",
+    "exampleKo": "교수님이 교탁 앞에 서 계세요.",
+    "exampleTranslated": "The professor is standing at the lectern.",
+    "source": "observed",
+    "bbox": [
+     0.295,
+     0.32,
+     0.13,
+     0.1
+    ],
+    "markerNumber": 6,
+    "iconKey": null
+   },
+   {
+    "id": "w-6",
+    "korean": "마이크",
+    "translation": "microphone",
+    "roman": "maikeu",
+    "exampleKo": "마이크 소리가 작아요.",
+    "exampleTranslated": "The microphone is too quiet.",
+    "source": "observed",
+    "bbox": [
+     0.36,
+     0.26,
+     0.05,
+     0.07
+    ],
+    "markerNumber": 7,
+    "iconKey": null
+   },
+   {
+    "id": "w-7",
+    "korean": "커튼",
+    "translation": "curtain",
+    "roman": "keoteun",
+    "exampleKo": "커튼을 쳐 주세요.",
+    "exampleTranslated": "Please close the curtains.",
+    "source": "observed",
+    "bbox": [
+     0.25,
+     0,
+     0.05,
+     0.39
+    ],
+    "markerNumber": 8,
+    "iconKey": null
+   },
+   {
+    "id": "w-8",
+    "korean": "출석",
+    "translation": "attendance",
+    "roman": "chulseok",
+    "exampleKo": "지금 출석을 부를게요.",
+    "exampleTranslated": "I'll take attendance now.",
+    "source": "related",
+    "bbox": null,
+    "markerNumber": null,
+    "iconKey": "attendance"
+   },
+   {
+    "id": "w-9",
+    "korean": "과제",
+    "translation": "assignment",
+    "roman": "gwaje",
+    "exampleKo": "과제는 언제까지 내요?",
+    "exampleTranslated": "When is the assignment due?",
+    "source": "related",
+    "bbox": null,
+    "markerNumber": null,
+    "iconKey": "assignment"
+   },
+   {
+    "id": "w-10",
+    "korean": "질문",
+    "translation": "question",
+    "roman": "jilmun",
+    "exampleKo": "질문이 있어요.",
+    "exampleTranslated": "I have a question.",
+    "source": "related",
+    "bbox": null,
+    "markerNumber": null,
+    "iconKey": "question"
+   },
+   {
+    "id": "w-11",
+    "korean": "수업",
+    "translation": "class",
+    "roman": "sueop",
+    "exampleKo": "수업이 몇 시에 시작해요?",
+    "exampleTranslated": "What time does class start?",
+    "source": "related",
+    "bbox": null,
+    "markerNumber": null,
+    "iconKey": "classroom"
+   }
+  ],
+  "cultureNotes": [
+   {
+    "id": "help",
+    "titleKo": "도움이 필요할 때, 한마디",
+    "titleTranslated": "A little phrase goes a long way",
+    "descriptionKo": "한국어가 아직 익숙하지 않아도 괜찮아요. 도움이 필요할 때 이 표현으로 정중하게 부탁해 보세요.",
+    "descriptionTranslated": "It is okay if Korean still feels unfamiliar. Try this polite expression when you need help.",
+    "phraseKo": "다시 한 번 말씀해 주시겠어요?",
+    "phraseTranslated": "Could you say that again, please?",
+    "qualificationKo": "상대와 상황에 따라 더 자연스러운 표현은 달라질 수 있어요.",
+    "qualificationTranslated": "The most natural wording may vary with the person and situation.",
+    "sourceIds": [
+     "study-in-korea-guide"
+    ]
+   },
+   {
+    "id": "thanks",
+    "titleKo": "작은 고마움도 말로 전해요",
+    "titleTranslated": "A small thank-you, a warm connection",
+    "descriptionKo": "도움을 받았다면 ‘감사합니다’라고 말해 보세요. 처음 만난 사람에게도 사용할 수 있는 정중한 감사 표현이에요.",
+    "descriptionTranslated": "Try saying ‘gamsahamnida’ after someone helps you. It is a polite way to thank someone, including a person you have just met.",
+    "phraseKo": "감사합니다.",
+    "phraseTranslated": "Thank you.",
+    "qualificationKo": "관계와 상황에 따라 다른 감사 표현을 쓸 수도 있어요.",
+    "qualificationTranslated": "Other expressions of thanks may suit different relationships and situations.",
+    "sourceIds": [
+     "study-in-korea-guide"
+    ]
+   }
+  ],
+  "createdAt": "2026-11-03T04:01:51.259Z",
+  "updatedAt": "2026-11-03T04:02:46.014Z",
+  "sample": false,
+  "aiModel": "anthropic/claude-opus-5.5"
+ }
+]
