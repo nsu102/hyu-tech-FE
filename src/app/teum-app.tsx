@@ -19,12 +19,12 @@ function Modal({ children, onClose, label }: { children: ReactNode; onClose: () 
   return <dialog ref={ref} className="modal" onCancel={onClose} aria-label={label} onClick={e => { if (e.target === e.currentTarget) onClose(); }}><div className="modal-inner"><div className="sheet-handle"/><button className="icon-button modal-close" aria-label="닫기" onClick={onClose}><Icon name="close"/></button>{children}</div></dialog>;
 }
 
-async function normalizeImage(file: File | Blob, rotation = 0, max = 1400, type = "image/jpeg"): Promise<string> {
+async function normalizeImage(file: File | Blob, rotation = 0): Promise<string> {
   const url = URL.createObjectURL(file);
   try {
     const img = new Image();
     await new Promise<void>((resolve, reject) => { img.onload = () => resolve(); img.onerror = reject; img.src = url; });
-    const ratio = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+    const ratio = Math.min(1, 1400 / Math.max(img.naturalWidth, img.naturalHeight));
     const w = Math.round(img.naturalWidth * ratio), h = Math.round(img.naturalHeight * ratio);
     const canvas = document.createElement("canvas");
     canvas.width = rotation % 180 ? h : w; canvas.height = rotation % 180 ? w : h;
@@ -33,7 +33,7 @@ async function normalizeImage(file: File | Blob, rotation = 0, max = 1400, type 
     ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.translate(canvas.width / 2, canvas.height / 2); ctx.rotate(rotation * Math.PI / 180);
     ctx.drawImage(img, -w / 2, -h / 2, w, h);
-    return canvas.toDataURL(type, 0.82);
+    return canvas.toDataURL("image/jpeg", 0.82);
   } finally { URL.revokeObjectURL(url); }
 }
 
@@ -158,20 +158,6 @@ export default function TeumApp() {
     } catch { setError("네트워크 오류로 단어집을 만들지 못했어요. 다시 시도해 주세요."); }
     finally { setBusy(false); }
   }
-  async function generateImage(word: Word) {
-    const patch = (fields: Partial<Word>) => setBook(b => b && { ...b, words: b.words.map(w => w.id === word.id ? { ...w, ...fields } : w) });
-    const previous = { imageRef: word.imageRef, imageOrigin: word.imageOrigin, imageStatus: word.imageStatus };
-    patch({ imageStatus: "pending" });
-    try {
-      const res = await fetch("/api/word-image", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ word: word.translation }) });
-      if (res.status === 503) { patch(previous); setToast("그림 생성 서버가 꺼져 있어요. scripts/sticker-server.py를 실행해 주세요."); return; }
-      if (res.status === 402) { patch(previous); setToast("Hugging Face 크레딧이 없어 그림을 만들 수 없어요."); return; }
-      if (!res.ok) throw new Error(String(res.status));
-      const { image } = await res.json() as { image: string };
-      // Shrink to a small WebP so it fits comfortably in localStorage.
-      patch({ imageRef: await normalizeImage(await (await fetch(image)).blob(), 0, 256, "image/webp"), imageOrigin: "generated", imageStatus: "ready" });
-    } catch { patch(previous); setToast("그림을 만들지 못했어요. 잠시 후 다시 시도해 주세요."); }
-  }
   function selectWord(word: Word) {
     if (!book) return;
     setStudyIndex(Math.max(0, book.words.findIndex(w => w.id === word.id)));
@@ -233,7 +219,7 @@ export default function TeumApp() {
           {editingTitle ? <input className="title-input" autoFocus maxLength={60} aria-label="단어집 제목" value={book.title} onChange={e => setBook({ ...book, title: e.target.value })} onBlur={() => { if (!book.title.trim()) setBook({ ...book, title: "단어집" }); setEditingTitle(false); }} onKeyDown={e => { if (e.key === "Enter") e.currentTarget.blur(); }}/> : <h1>{book.title}</h1>}
           <button className="icon-button" onClick={() => setEditingTitle(true)} aria-label="단어집 제목 수정"><Icon name="edit" size={16}/></button>
         </div>
-        <SwipeDeck words={book.words} scene={book.imageRef} index={wordIndex} revealed={flipped} onReveal={setFlipped} onIndexChange={next => { setStudyIndex(next); setFlipped(false); }} onEdit={() => setModal({ kind: "word", word: book.words[wordIndex] })} onImage={() => generateImage(book.words[wordIndex])} onSpeak={speak}/>
+        <SwipeDeck words={book.words} scene={book.imageRef} index={wordIndex} revealed={flipped} onReveal={setFlipped} onIndexChange={next => { setStudyIndex(next); setFlipped(false); }} onEdit={() => setModal({ kind: "word", word: book.words[wordIndex] })} onSpeak={speak}/>
         <div className="detail-footer">
           {!!book.cultureNotes.length && <button className="culture-notice" onClick={() => setModal({ kind: "culture" })} aria-label="한국 문화 보기"><Icon name="info" size={17}/><span>{book.cultureNotes[0].phraseKo}</span><Icon name="chevron" size={16}/></button>}
           <div className="detail-actions"><button className="button button-dark" onClick={saveBook} disabled={saved && !hasChanges}>{saved && !hasChanges ? "저장됨" : "저장"}</button>{saved && <button className="icon-button" onClick={() => setModal({ kind: "delete", book })} aria-label="단어집 삭제"><Icon name="trash" size={18}/></button>}</div>
