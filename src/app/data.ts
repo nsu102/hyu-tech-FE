@@ -79,7 +79,25 @@ const seeds: Record<SpaceType, WordSeed[]> = {
   ],
 };
 export const cultureSources = [{ id: "study-in-korea-guide", title: "국립국제교육원 · 한국 유학 가이드북, 필수 한국어", url: "https://cdn.studyinkorea.go.kr/public/res/guide/guideBook_ko.pdf", reviewedAt: "2026-11-02" }];
+// Café-specific notes for the café sample (and the café fallback when AI notes are unusable).
+const cafeNotes: CultureNote[] = [
+  {
+    id: "cafe-order", titleKo: "카운터에서 주문하고 진동벨을 받아요", titleTranslated: "Order at the counter, wait for the buzzer",
+    descriptionKo: "한국 카페에서는 보통 카운터에서 먼저 주문하고 계산해요. 진동벨을 받으면 자리에 앉아 기다렸다가, 벨이 울리면 음료를 가지러 가요.",
+    descriptionTranslated: "In Korean cafés you usually order and pay at the counter first. You may get a buzzer: take a seat, and when it goes off, pick up your drink.",
+    phraseKo: "아이스 아메리카노 한 잔 주세요.", phraseTranslated: "One iced americano, please.",
+    qualificationKo: "가게마다 방식이 달라요. 키오스크로 주문하는 곳도 많아요.", qualificationTranslated: "Every café works a little differently, and many use ordering kiosks.", sourceIds: [],
+  },
+  {
+    id: "cafe-here-or-to-go", titleKo: "“드시고 가세요?”", titleTranslated: "“For here or to go?”",
+    descriptionKo: "주문할 때 직원이 ‘드시고 가세요?’라고 자주 물어봐요. 매장에서 마실 거면 ‘여기서 마실게요’, 가져갈 거면 ‘포장해 주세요’라고 하면 돼요.",
+    descriptionTranslated: "When you order, staff often ask ‘deusigo gaseyo?’ (for here?). Say ‘yeogiseo masilgeyo’ to stay, or ‘pojanghae juseyo’ to take it away.",
+    phraseKo: "포장해 주세요.", phraseTranslated: "To go, please.",
+    qualificationKo: "‘테이크아웃이요’라고 해도 잘 통해요.", qualificationTranslated: "Saying ‘takeout’ works too.", sourceIds: [],
+  },
+];
 export function culture(type: SpaceType): CultureNote[] {
+  if (type === "restaurant") return cafeNotes;
   return [
     {
       id: "help", titleKo: "도움이 필요할 때, 한마디", titleTranslated: "A little phrase goes a long way",

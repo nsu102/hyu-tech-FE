@@ -2,7 +2,7 @@
 
 /* Photo dimensions and markers always refer to the normalized, uncropped image. */
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useRef, useState, type ChangeEvent, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import { cultureSources, languages, levels, makeBook, PROFILE_KEY, spaces, STORAGE_KEY, FREE_DAILY_BOOKS, USAGE_KEY, type Language, type Profile, type SpaceType, type VocabularyBook, type Word } from "./data";
 import { Icon } from "./icons";
 import { SwipeDeck } from "./components/swipe-deck";
@@ -12,7 +12,6 @@ import { CalendarSheet } from "./components/calendar-sheet";
 import { ProfileFields } from "./components/profile-fields";
 import { LangContext, translator, type T } from "./i18n";
 import { localizeBook } from "./i18n/content";
-import starterBooks from "./starter-books.json";
 
 type Screen = "home" | "library" | "capture" | "detail";
 type ModalState = { kind: "settings" } | { kind: "calendar" } | { kind: "culture" } | { kind: "scene" } | { kind: "pro" } | { kind: "onboarding" } | { kind: "word"; word: Word } | { kind: "delete"; book: VocabularyBook } | null;
@@ -64,7 +63,6 @@ export default function TeumApp() {
   const [toast, setToast] = useState("");
   const [modal, setModal] = useState<ModalState>(null);
   const [photo, setPhoto] = useState<string | null>(null);
-  const [space, setSpace] = useState<SpaceType | null>(null);
   const [description, setDescription] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -74,8 +72,7 @@ export default function TeumApp() {
   const [studyIndex, setStudyIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   // "live" = Claude API answered; "sample" = no API key on the server, so sample words are used and labelled as such.
-  const [aiMode, setAiMode] = useState<"checking" | "live" | "sample" | null>(null);
-  const [suggested, setSuggested] = useState<SpaceType | null>(null);
+  const [aiMode, setAiMode] = useState<"sample" | null>(null);
   const [profile, setProfile] = useState<Profile>({ lang: "en", level: "beginner", plan: "free" });
   const [moreBusy, setMoreBusy] = useState(false);
   const [usage, setUsage] = useState({ date: "", count: 0 });
@@ -97,12 +94,10 @@ export default function TeumApp() {
       if (stored) {
         const parsed: unknown = JSON.parse(stored);
         if (!Array.isArray(parsed) || !parsed.every(isBook)) throw new Error("invalid saved data");
-        setBooks(parsed);
-      } else {
-        // First visit: start with the bundled books already in the library, as if saved.
-        const starter = starterBooks as VocabularyBook[];
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(starter));
-        setBooks(starter);
+        // Earlier versions pre-saved two bundled books (ids "example-…"); they're no longer shipped.
+        const kept = parsed.filter(b => !b.id.startsWith("example-"));
+        if (kept.length !== parsed.length) localStorage.setItem(STORAGE_KEY, JSON.stringify(kept));
+        setBooks(kept);
       }
     } catch { setToast(translator(lang)("toast.load_failed")); }
     try { const u = JSON.parse(localStorage.getItem(USAGE_KEY) || "null") as { date: string; count: number } | null; if (u && typeof u.count === "number") setUsage(u); } catch { /* starts at 0 */ }
@@ -150,22 +145,9 @@ export default function TeumApp() {
     if (file.size > 10 * 1024 * 1024) { setError(t("error.file_size")); return; }
     setBusy(true); setError("");
     let image: string;
-    try { image = await normalizeImage(file); setPhoto(image); setSpace(null); setSuggested(null); }
+    try { image = await normalizeImage(file); setPhoto(image); }
     catch { setError(t("error.photo_open")); setBusy(false); return; }
     setBusy(false);
-    analyze(image);
-  }
-  async function analyze(image: string) {
-    if (aiMode === "sample") return;
-    setAiMode("checking");
-    try {
-      const res = await fetch("/api/vocab", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ step: "analyze", image }) });
-      if (res.status === 503) { setAiMode("sample"); return; }
-      if (!res.ok) { setAiMode("live"); return; } // analysis is only a hint; the user still picks the space
-      const data = await res.json() as { spaceType: SpaceType; confident: boolean };
-      setAiMode("live"); setSuggested(data.spaceType);
-      if (data.confident) setSpace(current => current ?? data.spaceType);
-    } catch { setAiMode(null); }
   }
   async function rotate() {
     if (!photo) return; setBusy(true);
@@ -175,19 +157,19 @@ export default function TeumApp() {
   }
   const left = Math.max(0, FREE_DAILY_BOOKS - (usage.date === today ? usage.count : 0));
   async function generate() {
-    if (!space || !photo || busy) return;
+    if (!photo || busy) return;
     if (profile.plan === "free" && aiMode !== "sample" && !left) { setError(t("limit.reached")); setModal({ kind: "pro" }); return; }
     setBusy(true); setError("");
-    const base = makeBook(space, photo, description);
+    const base = makeBook("other", photo, description); // sample fallback when no AI key
     try {
       if (aiMode !== "sample") {
-        const res = await fetch("/api/vocab", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ step: "generate", image: photo, spaceType: space, description, lang: profile.lang, level: profile.level }) });
+        const res = await fetch("/api/vocab", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ step: "generate", image: photo, description, lang: profile.lang, level: profile.level }) });
         if (res.ok) {
           const data = await res.json() as VocabResponse;
           const used = { date: today, count: FREE_DAILY_BOOKS - left + 1 };
           setUsage(used);
           try { localStorage.setItem(USAGE_KEY, JSON.stringify(used)); } catch { /* counted for this visit */ }
-          openBook({ ...base, title: data.title, words: data.words, cultureNotes: data.cultureNotes, sample: false, aiModel: data.aiModel, translationLanguage: profile.lang });
+          openBook({ ...base, spaceType: data.spaceType, title: data.title, words: data.words, cultureNotes: data.cultureNotes, sample: false, aiModel: data.aiModel, translationLanguage: profile.lang });
           return;
         }
         if (res.status !== 503) { setError(res.status === 429 ? t("error.rate_limited") : t("error.generate")); return; }
@@ -243,8 +225,7 @@ export default function TeumApp() {
       {screen === "home" && <HomeScreen books={books} onCapture={() => navigate("capture")} onSample={() => sample()} onOpen={openBook}/>}
 
       {screen === "capture" && <section className="capture-page page-enter content-pad">
-        <div className="step-label"><span className={!photo ? "current" : "done"}><b>01</b>{t("capture.step_photo")}</span><span className="step-line"/><span className={photo ? "current" : ""}><b>02</b>{t("capture.step_space")}</span></div>
-        <h1 className="page-title">{photo ? t("capture.title_space") : t("capture.title_photo")}</h1>
+        <h1 className="page-title">{photo ? t("capture.title_ready") : t("capture.title_photo")}</h1>
         <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={upload} className="hidden-input" aria-label={t("capture.gallery_input")}/>
         <input ref={cameraRef} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" onChange={upload} className="hidden-input" aria-label={t("capture.camera_input")}/>
         {!photo ? <>
@@ -255,13 +236,11 @@ export default function TeumApp() {
           <button className="sample-link" onClick={() => sample()}>{t("capture.open_sample")} <Icon name="arrow" size={15}/></button>
         </> : <>
           <div className="preview-photo"><img src={photo} alt={t("capture.photo_alt")}/><div className="preview-controls"><button onClick={rotate} disabled={busy}><Icon name="rotate" size={16}/>{t("capture.rotate")}</button><button onClick={() => fileRef.current?.click()} disabled={busy}><Icon name="image" size={16}/>{t("capture.change")}</button></div></div>
-          <h2 className="form-label">{t("capture.which_space")}{aiMode === "checking" && <span className="ai-chip"><span className="spinner"/>{t("capture.ai_looking")}</span>}{suggested && aiMode === "live" && <span className="ai-chip">{t("capture.ai_suggest", { space: t(`space.${suggested}`) })}</span>}</h2>
-          <div className="space-options">{spaces.map(s => <button key={s.id} onClick={() => setSpace(s.id)} className={space === s.id ? "selected" : ""} aria-pressed={space === s.id} style={{ "--tint": s.tint } as CSSProperties}><img src={s.photo} alt="" width={40} height={40}/>{t(`space.${s.id}`)}{space === s.id && <Icon name="check" size={16}/>}</button>)}</div>
-          {space === "other" && <label className="field-label">{t("capture.describe")} <span>{t("capture.optional")}</span><input maxLength={80} placeholder={t("capture.describe_placeholder")} value={description} onChange={e => setDescription(e.target.value)}/></label>}
+          <label className="field-label"><span className="field-head">{t("capture.describe")}<em>{t("capture.optional")}</em></span><input maxLength={80} placeholder={t("capture.describe_placeholder")} value={description} onChange={e => setDescription(e.target.value)}/></label>
           {aiMode === "sample" ? <div className="sample-notice"><Icon name="info" size={18}/><div><strong>{t("capture.sample_mode")}</strong><p>{t("capture.sample_mode_desc")}</p></div></div>
             : <div className="sample-notice live"><Icon name="sparkle" size={18}/><div><strong>{t("capture.ai_analysis")}</strong><p>{t("capture.ai_analysis_desc")}</p></div></div>}
           {profile.plan === "free" && aiMode !== "sample" && <p className="limit-note">{t("limit.left", { n: left })}</p>}
-          <button className="button button-dark" onClick={generate} disabled={!space || busy}>{busy ? <><span className="spinner"/>{t("capture.generating")}</> : <>{t("capture.make_book")}<Icon name="arrow" size={18}/></>}</button>
+          <button className="button button-dark" onClick={generate} disabled={busy}>{busy ? <><span className="spinner"/>{t("capture.generating")}</> : <>{t("capture.make_book")}<Icon name="arrow" size={18}/></>}</button>
         </>}
         {error && <p className="error-message" role="alert">{error}</p>}
       </section>}

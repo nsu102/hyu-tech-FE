@@ -18,11 +18,8 @@ Use natural, polite (해요체) everyday Korean. Write translations in the learn
 "expression" words are real, well-known 사자성어, 속담 or 관용구 only — never make one up. Put the meaning in translation.
 Culture notes must be widely known and accurate: no invented numbers, dates or history, no stereotypes. If unsure, pick a simpler note.`;
 
-const Analysis = z.object({
-  spaceType: z.enum(spaceTypes),
-  confident: z.boolean().describe("false if the space is ambiguous; the user will choose"),
-});
 const Draft = z.object({
+  spaceType: z.enum(spaceTypes).describe("closest category for the place in the photo; 'other' if none fits"),
   title: z.string().describe("Short Korean title (2–10 characters) naming the place shown in this photo"),
   words: z.array(z.object({
     korean: z.string(),
@@ -92,19 +89,13 @@ export async function POST(request: Request) {
   if (!/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(image) || image.length > MAX_IMAGE_CHARS) return Response.json({ error: "invalid_image" }, { status: 400 });
 
   try {
-    if (body?.step === "analyze") {
-      const { data } = await ask(Analysis, "space_analysis", "low", image,
-        `Which space is this? Options: ${spaces.map(s => `${s.id} (${s.english})`).join(", ")}.`);
-      return Response.json(data);
-    }
-
-    const spaceType = spaceTypes.find(s => s === body?.spaceType);
-    if (!spaceType) return Response.json({ error: "invalid_space" }, { status: 400 });
-    const space = spaces.find(s => s.id === spaceType)!;
+    // One call: the model works out the place from the photo (and the optional note) itself.
+    const known = spaces.find(s => s.id === body?.spaceType);
     const description = typeof body?.description === "string" ? body.description.slice(0, 80) : "";
     const lang = languages.find(l => l.code === body?.lang) ?? languages[0];
     const level = levels.find(l => l.id === body?.level) ?? levels[0];
-    const context = `The user confirmed this space is: ${space.english}${description ? ` — "${description}"` : ""}.
+    const context = `${known ? `This book is about a ${known.english.toLowerCase()}.` : "Work out what kind of place this is from the photo."}${description ? ` The user describes it as "${description}".` : ""}
+Categories for spaceType: ${spaces.map(s => `${s.id} (${s.english})`).join(", ")}.
 Learner: ${level.prompt}. Translations and example translations in ${lang.prompt}.`;
     const idioms = level.id === "advanced" ? "2–3" : level.id === "intermediate" ? "1–2" : "at most 1, and only a very common one";
 
@@ -122,7 +113,8 @@ Make a vocabulary book of 8–12 words: first the objects you can actually see (
 Also write 2–3 cultureNotes about this place, each a different kind: a fun fact about this kind of place in Korea, a Korean custom or etiquette tip for it, or a proverb or saying linked to it (explain it). Make them specific to what is in the photo when you can. Korean text at the learner's level; translations in ${lang.prompt}.`);
     const words = toWords(data.words);
     if (!words.length) return Response.json({ error: "no_words" }, { status: 502 });
-    return Response.json({ title: data.title.trim().slice(0, 60) || space.name, spaceType, words, cultureNotes: toNotes(data.cultureNotes) ?? culture(spaceType), aiModel: model });
+    const spaceType = data.spaceType;
+    return Response.json({ title: data.title.trim().slice(0, 60) || spaces.find(s => s.id === spaceType)!.name, spaceType, words, cultureNotes: toNotes(data.cultureNotes) ?? culture(spaceType), aiModel: model });
   } catch (error) {
     if (error instanceof AiError) return Response.json({ error: error.code, ...(error.status === 503 ? { mode: "sample" } : {}) }, { status: error.status });
     console.error("vocab route", error);
