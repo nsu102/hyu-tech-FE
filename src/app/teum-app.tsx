@@ -9,6 +9,7 @@ import { SwipeDeck } from "./components/swipe-deck";
 import type { VocabResponse } from "./api/vocab/route";
 import { HomeScreen } from "./components/home-screen";
 import { CalendarSheet } from "./components/calendar-sheet";
+import starterBooks from "./starter-books.json";
 
 type Screen = "home" | "library" | "capture" | "detail";
 type ModalState = { kind: "settings" } | { kind: "calendar" } | { kind: "culture" } | { kind: "scene" } | { kind: "word"; word: Word } | { kind: "delete"; book: VocabularyBook } | null;
@@ -76,6 +77,11 @@ export default function TeumApp() {
         const parsed: unknown = JSON.parse(stored);
         if (!Array.isArray(parsed) || !parsed.every(isBook)) throw new Error("invalid saved data");
         setBooks(parsed);
+      } else {
+        // First visit: start with the bundled books already in the library, as if saved.
+        const starter = starterBooks as VocabularyBook[];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(starter));
+        setBooks(starter);
       }
     } catch { setToast("저장한 단어집을 불러오지 못했어요. 브라우저 저장 공간을 확인해 주세요."); }
     setReady(true);
